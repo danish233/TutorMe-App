@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-n9-4lpm^l(gui2fxmf^5nx3*5+pc9d5$v#_#b&z(%70e(!*9^#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost','127.0.0.1','https://a24-tutorme.herokuapp.com/']
 
 
 # Application definition
@@ -109,7 +109,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
