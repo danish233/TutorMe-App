@@ -1,6 +1,5 @@
-# Django Practice Assessment
+#Project A-24 Tutor Me
 
-__Name:__
-
-__Computing ID:__
+Creators:
+- Jayanth Peetla (ynv7jk)
 
