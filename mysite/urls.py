@@ -16,6 +16,19 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from django.urls import path, include
+from django.views.generic import TemplateView
+from django.contrib.auth.views import LogoutView
+from myapp import views
+from myapp.views import index
+
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path('admin/', admin.site.urls),
+   path('', TemplateView.as_view(template_name="index.html")),
+   path('index/', views.index, name='index'),
+   # path('', index, name='index'),
+    path('accounts/', include('allauth.urls')),
+    path('accounts/google/student/', views.student, name='student_dashboard'),
+    path('accounts/google/tutor/', views.tutor, name='tutor_dashboard'),
+    path('logout/', LogoutView.as_view()),
 ]
