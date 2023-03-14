@@ -1,6 +1,5 @@
 {% load socialaccount %}
 
-<!DOCTYPE html>
 <html>
 <head>
   <title>Tutor Me</title>
@@ -24,8 +23,19 @@
 <body>
   <div class="container">
     <h1 class="mt-5">Tutor Me</h1>
+
     {% if user.is_authenticated %}
       <p>Welcome, You are logged in as {{ user.username }}</p>
+
+      <center>
+        <h3>Math Classes!</h3>
+
+        {% for c in classes %}
+          <li><p> {{c}} </p></li>
+        {% endfor %}
+      </center>
+
+
     {% else %}
       <div class="row mt-3">
         <div class="col-sm-6">
