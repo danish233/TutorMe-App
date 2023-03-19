@@ -18,7 +18,10 @@
       border-color: #007bff;
       color: #fff;
     }
-
+    .search-container {
+      text-align: center;
+      margin-top: 50px;
+    }
 
     </style>
 </head>
@@ -26,23 +29,34 @@
 <div class="container">
     <h1 class="mt-5">Tutor Me</h1>
 
+    <div class="search-container">
+        <form method="GET" action="{% url 'index' %}">
+            <input type="text" name="search_query" placeholder="Search for classes" value="{{ request.GET.search_query }}">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
     {% if user.is_authenticated %}
     <p>Welcome, You are logged in as {{ user.username }}</p>
 
     <center>
         <h3>Classes Available</h3>
-        {% for classes in page_obj %}
-        <ul style="list-style-type: none">
-            <li>{{classes}}</li>
-        </ul>
-        {% endfor %}
+        {% if page_obj %}
+            {% for classes in page_obj %}
+                <ul style="list-style-type: none">
+                    <li>{{ classes }}</li>
+                </ul>
+            {% endfor %}
+        {% else %}
+            <p>No results found.</p>
+        {% endif %}
     </center>
 
     <div class="pagination">
     <span class="step-links">
         {% if page_obj.has_previous %}
-            <a href="?page=1">&laquo; first</a>
-            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            <a href="?search_query={{ request.GET.search_query }}&page=1">&laquo; first</a>
+            <a href="?search_query={{ request.GET.search_query }}&page={{ page_obj.previous_page_number }}">previous</a>
         {% endif %}
 
         <span class="current">
@@ -50,8 +64,8 @@
         </span>
 
         {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}">next</a>
-            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            <a href="?search_query={{ request.GET.search_query }}&page={{ page_obj.next_page_number }}">next</a>
+            <a href="?search_query={{ request.GET.search_query }}&page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
         {% endif %}
     </span>
     </div>
@@ -72,4 +86,5 @@
 </div>
 </body>
 </html>
+
 
