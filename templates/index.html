@@ -18,6 +18,12 @@
       border-color: #007bff;
       color: #fff;
     }
+    #search-form {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
   </style>
 </head>
 <body>
@@ -27,12 +33,23 @@
     {% if user.is_authenticated %}
       <p>Welcome, You are logged in as {{ user.username }}</p>
 
+      <div id="search-form">
+        <form class="form-inline my-2 my-lg-0" method="get">
+          <input class="form-control mr-sm-2" type="search" name="search_query" placeholder="Search classes" aria-label="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+      </div>
+
       <center>
         <h3>Math Classes!</h3>
 
-        {% for c in classes %}
-          <li><p> {{c}} </p></li>
-        {% endfor %}
+        {% if classes %}
+          {% for c in classes %}
+            <li><p> {{c}} </p></li>
+          {% endfor %}
+        {% else %}
+          <p>No classes found.</p>
+        {% endif %}
       </center>
 
 
@@ -49,4 +66,3 @@
   </div>
 </body>
 </html>
-

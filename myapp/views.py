@@ -21,13 +21,22 @@ def index(request):
 
         url = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term=' + spring_2023 + '&page=1'
 
-        r = requests.get(url + '&subject=' + 'MATH')
-        classes = []
-        for c in r.json():
-            class_info = c['catalog_nbr'] + '-' + c['class_section'], c['component'] + c['descr']
-            classes.append(class_info)
+        search_query = request.GET.get('search_query', '').strip()
+        if search_query:
+            r = requests.get(url + '&subject=' + 'MATH')
+            classes = []
+            for c in r.json():
+                if search_query.lower() in c['catalog_nbr'].lower() or search_query.lower() in c['descr'].lower():
+                    class_info = c['catalog_nbr'] + '-' + c['class_section'], c['component'] + c['descr']
+                    classes.append(class_info)
+        else:
+            r = requests.get(url + '&subject=' + 'MATH')
+            classes = []
+            for c in r.json():
+                class_info = c['catalog_nbr'] + '-' + c['class_section'], c['component'] + c['descr']
+                classes.append(class_info)
 
-        context = {'classes': classes}
+        context = {'classes': classes, 'search_query': search_query}
         return render(request, 'index.html', context)
 
 
