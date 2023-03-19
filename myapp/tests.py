@@ -23,5 +23,5 @@ class TestModelTests(TestCase):
         self.assertEqual(response.status_code, 302)
 
     def test_url(self):
-        response = self.client.get('accounts/')
+        response = self.client.get('/accounts/')
         self.assertEqual(response.status_code, 200)
