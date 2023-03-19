@@ -11,7 +11,10 @@ class TestModelTests(TestCase):
         """
         self.assertIs(True, True)
 
+    def setUP(self):
+
     def test_accounts_URls(self):
         url = reverse('index')
         print(resolve(url))
+        self.assertEqual()
 
