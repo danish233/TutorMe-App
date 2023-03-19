@@ -22,5 +22,12 @@ class TestModelTests(TestCase):
         self.assertTrue(isinstance(t, Test))
 
     def test_views(self):
-        v = self.create_index()
-        url = reverse('')
+        v = self.setUp()
+        url = reverse('myapp.views.index')
+        resp = self.client.get(url)
+        self.assertIn(v.title)
+
+
+
+
+
