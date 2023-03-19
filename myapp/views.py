@@ -2,7 +2,9 @@ from django.contrib.sites import requests
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 import requests
+import json
 
 
 @login_required
@@ -19,24 +21,28 @@ def index(request):
         spring_2023 = '1232'
         fall_2023 = '1238'
 
-        url = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term=' + spring_2023 + '&page=1'
+        dept_url = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearchOptions?institution=UVA01&term=' + spring_2023
+        req = requests.get(dept_url)
+        #name = req.json()['subjects']
+        #clist = []
+        #for i in name:
+            #clist.append(i['subject'])
 
-        search_query = request.GET.get('search_query', '').strip()
-        if search_query:
-            r = requests.get(url + '&subject=' + 'MATH')
-            classes = []
-            for c in r.json():
-                if search_query.lower() in c['catalog_nbr'].lower() or search_query.lower() in c['descr'].lower():
-                    class_info = c['catalog_nbr'] + '-' + c['class_section'], c['component'] + c['descr']
-                    classes.append(class_info)
-        else:
-            r = requests.get(url + '&subject=' + 'MATH')
-            classes = []
+        clist = ['MATH', 'APMA', 'ENGR']
+
+        url = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term=' + spring_2023
+        classes = []
+        for s in clist:
+            r = requests.get(url + '&subject=' + s + '&page=1')
             for c in r.json():
                 class_info = c['catalog_nbr'] + '-' + c['class_section'], c['component'] + c['descr']
                 classes.append(class_info)
 
-        context = {'classes': classes, 'search_query': search_query}
+        paginator = Paginator(classes, 25)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        context = {'page_obj': page_obj}
+        #context = {'classes': classes}
         return render(request, 'index.html', context)
 
 
