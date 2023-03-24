@@ -1,5 +1,15 @@
 {% load socialaccount %}
 
+{# Load the tag library #}
+{% load bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
 <html>
 <head>
     <title>Tutor Me</title>
@@ -27,7 +37,30 @@
 </head>
 <body>
 <div class="container">
-    <h1 class="mt-5">Tutor Me</h1>
+    
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark justify-content-between">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Tutor Me</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Home
+                            <span class="visually-hidden">(current)</span>
+                        </a>
+                    </li>
+                </ul>
+                    <form class="form-inline my-2 my-lg-0">
+                        <span class="navbar-text">
+                            {% if user.is_authenticated %}
+                            Welcome, {{ user.username }}
+                        </span>
+                    </form>
+            </div>
+        </div>
+    </nav>
 
     <div class="search-container">
         <form method="GET" action="{% url 'index' %}">
@@ -36,8 +69,6 @@
         </form>
     </div>
 
-    {% if user.is_authenticated %}
-    <p>Welcome, You are logged in as {{ user.username }}</p>
 
     <center>
         <h3>Classes Available</h3>
