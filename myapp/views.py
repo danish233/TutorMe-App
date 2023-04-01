@@ -9,25 +9,17 @@ import json
 @login_required
 def index(request):
     if request.user.groups.filter(name='Student').exists():
-        # return redirect('student_dashboard')
         return render(request, 'student.html')
-
     elif request.user.groups.filter(name='Tutor').exists():
-        # return redirect('tutor_dashboard')
         return render(request, 'tutor.html')
-
     else:
         spring_2023 = '1232'
         fall_2023 = '1238'
 
-        dept_url = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearchOptions?institution=UVA01&term=' + spring_2023
+        dept_url = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearchOptions?institution=UVA01&term=' + spring_2023 + '&career=UGRD&institutions=UVA01'
         req = requests.get(dept_url)
-        #name = req.json()['subjects']
-        #clist = []
-        #for i in name:
-            #clist.append(i['subject'])
-
-        clist = ['MATH', 'APMA', 'ENGR']
+        name = req.json()['subjects']
+        clist = [i['subject'] for i in name]
 
         url = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term=' + spring_2023
         classes = []

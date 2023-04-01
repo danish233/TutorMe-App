@@ -1,0 +1,78 @@
+{% load account socialaccount %}
+
+{% block content %}
+
+<!-- Bootstrap code -->
+{# Load the tag library #}
+{% load bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+<div class="container">
+
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark justify-content-between">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Tutor Me</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Sign In
+                            <span class="visually-hidden">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="/accounts/signup/">Sign Up</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+      </nav>
+
+{% get_providers as socialaccount_providers %}
+
+{% if socialaccount_providers %}
+<p>Please sign in with one
+of your existing third party accounts. Or, <a href="{{ signup_url }}">sign up</a>
+for a {{ site_name }} account and then sign in below:</p>
+
+{% include "socialaccount/snippets/login_extra.html" %}
+
+{% else %}
+<p>If you have not created an account yet, then please
+<a href="{{ signup_url }}">sign up</a> first.</p>
+{% endif %}
+
+<form class="login" method="POST" action="{% url 'account_login' %}">
+  {% csrf_token %}
+  {% bootstrap_form form %}
+  {% if redirect_field_value %}
+  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+  {% endif %}
+  <a class="button secondaryAction" href="{% url 'account_reset_password' %}">Forgot Password?</a>
+  {% buttons %}
+  <button class="btn btn-success" type="submit">Sign In</button>
+  {% endbuttons %}
+</form>
+
+<div class="socialaccount_ballot">
+
+  <div class="login-or ">or sign in with:</div>
+  <ul class="socialaccount_providers">
+    {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+  </ul>
+
+
+</div>
+</div>
+
+
+
+{% endblock %}
