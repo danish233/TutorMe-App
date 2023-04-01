@@ -32,12 +32,15 @@
       text-align: center;
       margin-top: 50px;
     }
+    .search-results {
+      margin-top: 50px;
+    }
 
     </style>
 </head>
 <body>
 <div class="container">
-    
+
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark justify-content-between">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Tutor Me</a>
@@ -56,6 +59,7 @@
                         <span class="navbar-text">
                             {% if user.is_authenticated %}
                             Welcome, {{ user.username }}
+                            {% endif %}
                         </span>
                     </form>
             </div>
@@ -63,59 +67,37 @@
     </nav>
 
     <div class="search-container">
-        <form method="GET" action="{% url 'index' %}">
-            <input type="text" name="search_query" placeholder="Search for classes" value="{{ request.GET.search_query }}">
-            <button type="submit">Search</button>
+        <form id="search-form">
+            {% csrf_token %}
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" name="search_query" placeholder="Search for classes" value="{{ request.GET.search_query }}">
+                <button class="btn btn-primary" type="submit">Search</button>
+            </div>
         </form>
     </div>
 
+    <div id="search-results" class="search-results"></div>
 
-    <center>
-        <h3>Classes Available</h3>
-        {% if page_obj %}
-            {% for classes in page_obj %}
-                <ul style="list-style-type: none">
-                    <li>{{ classes }}</li>
-                </ul>
-            {% endfor %}
-        {% else %}
-            <p>No results found.</p>
-        {% endif %}
-    </center>
-
-    <div class="pagination">
-    <span class="step-links">
-        {% if page_obj.has_previous %}
-            <a href="?search_query={{ request.GET.search_query }}&page=1">&laquo; first</a>
-            <a href="?search_query={{ request.GET.search_query }}&page={{ page_obj.previous_page_number }}">previous</a>
-        {% endif %}
-
-        <span class="current">
-            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-        </span>
-
-        {% if page_obj.has_next %}
-            <a href="?search_query={{ request.GET.search_query }}&page={{ page_obj.next_page_number }}">next</a>
-            <a href="?search_query={{ request.GET.search_query }}&page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-        {% endif %}
-    </span>
-    </div>
-
-
-    {% else %}
-    <div class="row mt-3">
-        <div class="col-sm-6">
-            <a href="{% provider_login_url 'google' %}?next=/accounts/google/student/"
-               class="btn btn-lg btn-google mt-3 w-100">Login as Student with Google</a>
-        </div>
-        <div class="col-sm-6">
-            <a href="{% provider_login_url 'google' %}?next=/accounts/google/tutor/"
-               class="btn btn-lg btn-google mt-3 w-100">Login as Tutor with Google</a>
-        </div>
-    </div>
-    {% endif %}
 </div>
+
+<script>
+$(document).ready(function() {
+    $('#search-form').submit(function(event) {
+        event.preventDefault();
+        var query = $('#search-form input[name="search_query"]').val();
+        $.ajax({
+            type: 'GET',
+            url: '{% url "index" %}',
+            data: {
+                'search_query': query,
+            },
+            success: function(data) {
+                $('#search-results').html(data);
+            },
+        });
+    });
+});
+</script>
+
 </body>
 </html>
-
-
