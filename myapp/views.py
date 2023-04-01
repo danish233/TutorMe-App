@@ -54,7 +54,6 @@ def index(request):
 
 
 
-
 @login_required
 def student(request):
     return render(request, 'student.html')
