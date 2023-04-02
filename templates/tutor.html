@@ -78,18 +78,48 @@
 
 
 
-   <center>
-       <h3>Classes Available</h3>
-       {% if page_obj %}
-           {% for classes in page_obj %}
-               <ul style="list-style-type: none">
-                   <li>{{ classes }}</li>
-               </ul>
-           {% endfor %}
-       {% else %}
-           <p>No results found.</p>
-       {% endif %}
-   </center>
+<!--   <center>-->
+<!--       <h3>Classes Available</h3>-->
+<!--       {% if page_obj %}-->
+<!--           {% for classes in page_obj %}-->
+<!--               <ul style="list-style-type: none">-->
+<!--                   <li>{{ classes }}</li>-->
+<!--               </ul>-->
+<!--           {% endfor %}-->
+<!--       {% else %}-->
+<!--           <p>No results found.</p>-->
+<!--       {% endif %}-->
+<!--   </center>-->
+
+    {% csrf_token %}
+
+<!-- ... -->
+
+    <center>
+    <h3>Classes Available</h3>
+    {% if page_obj %}
+        {% for classes in page_obj %}
+            <ul style="list-style-type: none">
+                <li>{{ classes }}</li>
+                <!-- Add a form for selecting hours -->
+                <form method="POST" action="{% url 'tutor_hours' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="class_name" value="{{ classes }}">
+                    <label for="hours">Select hours:</label>
+                    <select name="hours" id="hours">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <!-- Add more options if needed -->
+                    </select>
+                    <button type="submit">Submit</button>
+                </form>
+            </ul>
+        {% endfor %}
+    {% else %}
+        <p>No results found.</p>
+    {% endif %}
+    </center>
 
 
    <div class="pagination">

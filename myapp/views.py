@@ -126,3 +126,8 @@ def tutor(request):
     # return render(request, 'index.html', context)
     return render(request, 'tutor.html', context)
 
+def tutor_hours(request):
+    if request.method == 'POST':
+        class_name = request.POST.get('class_name')
+        hours = request.POST.get('hours')
+        return render(request, 'tutor_hours.html', {'class_name': class_name, 'hours': hours})
