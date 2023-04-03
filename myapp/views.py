@@ -23,12 +23,11 @@ def index(request):
 
         dept_url = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearchOptions?institution=UVA01&term=' + spring_2023
         req = requests.get(dept_url)
-        #name = req.json()['subjects']
-        #clist = []
-        #for i in name:
-            #clist.append(i['subject'])
+        name = req.json()['subjects']
+        clist = []
+        for i in name:
+            clist.append(i['subject'])
 
-        clist = ['MATH', 'APMA', 'ENGR']
 
         url = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term=' + spring_2023
         classes = []
