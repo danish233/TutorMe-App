@@ -10,9 +10,9 @@
 </head>
 <body>
 <div class="container">
-    <h1>Tutor Hours</h1>
+    <h1>Confirmation of Availability</h1>
     <p>You have selected class: {{ class_name }}</p>
-    <p>You are available for {{ hours }} hours.</p>
+    <p>You are available from {{ start_time }} to {{ end_time }}.</p>
     <a href="{% url 'tutor_dashboard' %}">Back to dashboard</a>
 </div>
 </body>

@@ -126,8 +126,22 @@ def tutor(request):
     # return render(request, 'index.html', context)
     return render(request, 'tutor.html', context)
 
+from django.shortcuts import render
+from .models import TutorClass
+
 def tutor_hours(request):
     if request.method == 'POST':
         class_name = request.POST.get('class_name')
-        hours = request.POST.get('hours')
-        return render(request, 'tutor_hours.html', {'class_name': class_name, 'hours': hours})
+        start_time = request.POST.get('start_time')
+        end_time = request.POST.get('end_time')
+
+        tutor_class = TutorClass(
+            class_name=class_name,
+            tutor=request.user,
+            start_time=start_time,
+            end_time=end_time,
+        )
+        #tutor_class.save()
+
+        return render(request, 'tutor_hours.html', {'class_name': class_name, 'start_time': start_time, 'end_time': end_time})
+
