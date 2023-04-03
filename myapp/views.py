@@ -7,6 +7,7 @@ from django import forms
 from .models import TutorSession
 import requests
 import json
+from .forms import TutorSessionForm
 
 
 @login_required
@@ -92,6 +93,24 @@ def student(request):
     page_obj = paginator.get_page(page_number)
     context = {'page_obj': page_obj, 'search_query': search_query}
    # return render(request, 'index.html', context)
+    return render(request, 'student.html', context)
+
+@login_required
+def student_form(request):
+    context = {}
+    tutor_session_form = TutorSessionForm(request.POST or None, request.FILES or None)
+
+    if request.method == "POST":
+        computing_id = request.POST.get("computing_id")
+        department = request.POST.get('department')
+        course_number = request.POST.get('course_number')
+        date_of_session = request.POST.get('date_of_session')
+        email = request.POST.get('email')
+        tutor_Name = request.POST.get('tutor_Name')
+
+    if tutor_session_form.is_valid():
+        tutor_session_form.save()
+    context['tutor_session_form'] = tutor_session_form
     return render(request, 'student.html', context)
 
 

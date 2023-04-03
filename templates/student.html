@@ -70,12 +70,32 @@
    </nav>
 
 
+   <form class = "form-horizontal" action="{% url 'student_dashboard' %}" method="post">
+
+    {% for session in student_form%}
+        <li>{{ session.department }}</li>
+        <textarea name = 'department' placeholder="department"></textarea>
+        <li>  {{ session.course_number }}</li>
+        <li>{{ session.date_of_session }}</li>
+        <li>  {{ session.email }}</li>
+        <li>{{ session.tutor_Name }}</li>
+    {% endfor %}
+
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Submit">
+</form>
+
+
    <div class="search-container">
        <form method="GET" action="{% url 'student_dashboard' %}">
            <input type="text" name="search_query" placeholder="Search for classes" value="{{ request.GET.search_query }}">
            <button type="submit">Search</button>
        </form>
    </div>
+
+
+
 
 
 

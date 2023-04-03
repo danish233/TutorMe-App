@@ -17,11 +17,12 @@ class StudentProfile(models.Model):
 
 
 class TutorSession(models.Model):
+ #   computing_id = models.CharField(max_length=7)
     department = models.CharField(max_length=4)
     course_number = models.CharField(max_length=4)
     date_of_session = widgets.DateInput(attrs={'type': 'date'})
     email = models.EmailField()
     tutor_Name = models.CharField(max_length=30)
 
-    def __str__(self):
-        return self.title
+    # def __str__(self):
+    #     return self.computing_id
