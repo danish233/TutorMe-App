@@ -57,40 +57,30 @@ def user_type(request):
     return render(request, 'user_type.html')
 
 
-@login_required
 def student(request):
-    # spring_2023 = '1232'
-    # fall_2023 = '1238'
-    #
-    # dept_url = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearchOptions?institution=UVA01&term=' + spring_2023 + '&career=UGRD&institutions=UVA01'
-    # req = requests.get(dept_url)
-    # name = req.json()['subjects']
-    # clist = [i['subject'] for i in name]
-    #
-    # url = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term=' + spring_2023
-    classes = []
-    search_query = request.GET.get('search_query')
-    # if search_query:
-    #     for s in clist:
-    #         r = requests.get(url + '&subject=' + s + '&page=1')
-    #         for c in r.json():
-    #             if search_query.lower() in c['descr'].lower() or search_query.lower() in c['catalog_nbr'].lower():
-    #                 class_info = c['catalog_nbr'] + '-' + c['class_section'], c['component'] + c['descr']
-    #                 classes.append(class_info)
-    # else:
-    #     for s in clist:
-    #         r = requests.get(url + '&subject=' + s + '&page=1')
-    #         for c in r.json():
-    #             class_info = c['catalog_nbr'] + '-' + c['class_section'], c['component'] + c['descr']
-    #             classes.append(class_info)
-    #
-    paginator = Paginator(classes, 25)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    context = {'page_obj': page_obj, 'search_query': search_query}
-   # return render(request, 'index.html', context)
-    return render(request, 'student.html', context)
-
+    if 'q' in request.GET:
+        query = request.GET['q']
+        term = '1232'  # replace with appropriate term code
+        url = f'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term={term}&keyword={query}'
+        response = requests.get(url)
+        data = response.json()
+        courses = []
+        for c in data:
+            course = {
+                'subject': c['subject'],
+                'catalog_nbr': c['catalog_nbr'],
+                'class_section': c['class_section'],
+                'component': c['component'],
+                'descr': c['descr'],
+                'class_nbr': c['class_nbr'],
+                'class_capacity': c['class_capacity'],
+                'enrollment_available': c['enrollment_available']
+            }
+            courses.append(course)
+        context = {'courses': courses, 'query': query}
+        return render(request, 'student.html', context)
+    else:
+        return render(request, 'student.html')
 
 @login_required
 def tutor(request):
