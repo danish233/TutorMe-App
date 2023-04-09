@@ -60,27 +60,32 @@ def user_type(request):
 def student(request):
     if 'q' in request.GET:
         query = request.GET['q']
+        query = str(query)
         term = '1232'  # replace with appropriate term code
         url = f'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term={term}&keyword={query}'
         response = requests.get(url)
         data = response.json()
         courses = []
         for c in data:
-            course = {
-                'subject': c['subject'],
-                'catalog_nbr': c['catalog_nbr'],
-                'class_section': c['class_section'],
-                'component': c['component'],
-                'descr': c['descr'],
-                'class_nbr': c['class_nbr'],
-                'class_capacity': c['class_capacity'],
-                'enrollment_available': c['enrollment_available']
-            }
-            courses.append(course)
+            if query.lower() in c['subject'].lower() or query.lower() in c['catalog_nbr'].lower() or \
+               query.lower() in c['class_section'].lower() or query.lower() in c['component'].lower() or \
+               query.lower() in c['descr'].lower() or query.lower() in str(c['class_nbr']):
+                course = {
+                    'subject': c['subject'],
+                    'catalog_nbr': c['catalog_nbr'],
+                    'class_section': c['class_section'],
+                    'component': c['component'],
+                    'descr': c['descr'],
+                    'class_nbr': c['class_nbr'],
+                    'class_capacity': c['class_capacity'],
+                    'enrollment_available': c['enrollment_available']
+                }
+                courses.append(course)
         context = {'courses': courses, 'query': query}
         return render(request, 'student.html', context)
     else:
         return render(request, 'student.html')
+
 
 @login_required
 def tutor(request):
