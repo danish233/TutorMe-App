@@ -90,7 +90,6 @@ def student(request):
 @login_required
 def tutor(request):
     # spring_2023 = '1232'
-    # fall_2023 = '1238'
     #
     # dept_url = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearchOptions?institution=UVA01&term=' + spring_2023 + '&career=UGRD&institutions=UVA01'
     # req = requests.get(dept_url)
