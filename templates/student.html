@@ -36,12 +36,8 @@
           <tr>
             <th>Subject</th>
             <th>Catalog Number</th>
-            <th>Class Section</th>
             <th>Component</th>
             <th>Description</th>
-            <th>Class Nbr</th>
-            <th>Capacity</th>
-            <th>Available</th>
           </tr>
         </thead>
         <tbody>
@@ -49,12 +45,8 @@
           <tr>
             <td>{{ course.subject }}</td>
             <td>{{ course.catalog_nbr }}</td>
-            <td>{{ course.class_section }}</td>
             <td>{{ course.component }}</td>
             <td>{{ course.descr }}</td>
-            <td>{{ course.class_nbr }}</td>
-            <td>{{ course.class_capacity }}</td>
-            <td>{{ course.enrollment_available }}</td>
           </tr>
           {% endfor %}
         </tbody>

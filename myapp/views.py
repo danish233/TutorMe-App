@@ -68,19 +68,16 @@ def student(request):
         courses = []
         for c in data:
             if query.lower() in c['subject'].lower() or query.lower() in c['catalog_nbr'].lower() or \
-               query.lower() in c['class_section'].lower() or query.lower() in c['component'].lower() or \
-               query.lower() in c['descr'].lower() or query.lower() in str(c['class_nbr']):
+               query.lower() in c['component'].lower() or \
+               query.lower() in c['descr'].lower():
                 course = {
                     'subject': c['subject'],
                     'catalog_nbr': c['catalog_nbr'],
-                    'class_section': c['class_section'],
                     'component': c['component'],
-                    'descr': c['descr'],
-                    'class_nbr': c['class_nbr'],
-                    'class_capacity': c['class_capacity'],
-                    'enrollment_available': c['enrollment_available']
+                    'descr': c['descr']
                 }
-                courses.append(course)
+                if course not in courses:
+                    courses.append(course)
         context = {'courses': courses, 'query': query}
         return render(request, 'student.html', context)
     else:
@@ -99,19 +96,16 @@ def tutor(request):
         courses = []
         for c in data:
             if query.lower() in c['subject'].lower() or query.lower() in c['catalog_nbr'].lower() or \
-               query.lower() in c['class_section'].lower() or query.lower() in c['component'].lower() or \
-               query.lower() in c['descr'].lower() or query.lower() in str(c['class_nbr']):
+               query.lower() in c['component'].lower() or \
+               query.lower() in c['descr'].lower():
                 course = {
                     'subject': c['subject'],
                     'catalog_nbr': c['catalog_nbr'],
-                    'class_section': c['class_section'],
                     'component': c['component'],
-                    'descr': c['descr'],
-                    'class_nbr': c['class_nbr'],
-                    'class_capacity': c['class_capacity'],
-                    'enrollment_available': c['enrollment_available']
+                    'descr': c['descr']
                 }
-                courses.append(course)
+                if course not in courses:
+                    courses.append(course)
         context = {'courses': courses, 'query': query}
         return render(request, 'tutor.html', context)
     else:
