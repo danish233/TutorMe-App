@@ -62,27 +62,31 @@ def student(request):
         query = request.GET['q']
         query = str(query)
         term = '1232'  # replace with appropriate term code
-        url = f'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term={term}&keyword={query}'
+        url = f'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term={term}&subject={query}'
         response = requests.get(url)
         data = response.json()
         courses = []
-        for c in data:
-            if query.lower() in c['subject'].lower() or query.lower() in c['catalog_nbr'].lower() or \
-               query.lower() in c['component'].lower() or \
-               query.lower() in c['descr'].lower():
-                course = {
-                    'subject': c['subject'],
-                    'catalog_nbr': c['catalog_nbr'],
-                    'component': c['component'],
-                    'descr': c['descr']
-                }
-                if course not in courses:
-                    courses.append(course)
-        context = {'courses': courses, 'query': query}
+        context = parse(courses, data, query)
+
+        #no courses found, try searching by course number
+        if not courses:
+            url = f'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term={term}&catalog_nbr={query}'
+            response = requests.get(url)
+            data = response.json()
+            courses = []
+            context = parse(courses, data, query)
+
+        #no courses found, try searching by description
+        if not courses:
+            url = f'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term={term}&keyword={query}'
+            response = requests.get(url)
+            data = response.json()
+            courses = []
+            context = parse(courses, data, query)
+
         return render(request, 'student.html', context)
     else:
         return render(request, 'student.html')
-
 
 @login_required
 def tutor(request):
@@ -90,23 +94,28 @@ def tutor(request):
         query = request.GET['q']
         query = str(query)
         term = '1232'  # replace with appropriate term code
-        url = f'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term={term}&keyword={query}'
+        url = f'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term={term}&subject={query}'
         response = requests.get(url)
         data = response.json()
         courses = []
-        for c in data:
-            if query.lower() in c['subject'].lower() or query.lower() in c['catalog_nbr'].lower() or \
-               query.lower() in c['component'].lower() or \
-               query.lower() in c['descr'].lower():
-                course = {
-                    'subject': c['subject'],
-                    'catalog_nbr': c['catalog_nbr'],
-                    'component': c['component'],
-                    'descr': c['descr']
-                }
-                if course not in courses:
-                    courses.append(course)
-        context = {'courses': courses, 'query': query}
+        context = parse(courses, data, query)
+
+        #no courses found, try searching by course number
+        if not courses:
+            url = f'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term={term}&catalog_nbr={query}'
+            response = requests.get(url)
+            data = response.json()
+            courses = []
+            context = parse(courses, data, query)
+
+        #no courses found, try searching by description
+        if not courses:
+            url = f'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term={term}&keyword={query}'
+            response = requests.get(url)
+            data = response.json()
+            courses = []
+            context = parse(courses, data, query)
+        
         return render(request, 'tutor.html', context)
     else:
         return render(request, 'tutor.html')
@@ -130,3 +139,20 @@ def tutor_hours(request):
 
         return render(request, 'tutor_hours.html', {'class_name': class_name, 'start_time': start_time, 'end_time': end_time})
 
+
+def parse(courses, data, query):
+    for c in data:
+        if query.lower() in c['subject'].lower() or query.lower() in c['catalog_nbr'].lower() or \
+                query.lower() in c['component'].lower() or \
+                query.lower() in c['descr'].lower():
+            course = {
+                'subject': c['subject'],
+                'catalog_nbr': c['catalog_nbr'],
+                'component': c['component'],
+                'descr': c['descr']
+            }
+            if course not in courses:
+                courses.append(course)
+
+    context = {'courses': courses, 'query': query}
+    return context
