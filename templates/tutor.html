@@ -47,6 +47,17 @@
             <td>{{ course.catalog_nbr }}</td>
             <td>{{ course.component }}</td>
             <td>{{ course.descr }}</td>
+            <td>
+            <form method="post" action="{% url 'tutor_hours' %}">
+              {% csrf_token %}
+              <input type="hidden" name="class_name" value="{{ course.subject }} {{ course.catalog_nbr }}">
+              <label for="start_time">From:</label>
+              <input type="time" name="start_time" required>
+              <label for="end_time">To:</label>
+              <input type="time" name="end_time" required>
+              <button type="submit" class="btn btn-primary">Sign Up</button>
+            </form>
+          </td>
           </tr>
           {% endfor %}
         </tbody>
