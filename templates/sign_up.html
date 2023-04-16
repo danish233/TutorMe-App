@@ -1,0 +1,16 @@
+<table border='1'>
+  <tr>
+    <th>ClassName</th>
+    <th>Tutor</th>
+    <th>StartTime</th>
+      <th>EndTime</th>
+  </tr>
+  {% for x in tutors_for_classes %}
+    <tr>
+      <td>{{ x.class_name }}</td>
+        <td>{{ x.tutor }}</td>
+      <td>{{ x.start_time }}</td>
+    <td>{{ x.end_time }}</td>
+    </tr>
+  {% endfor %}
+</table>

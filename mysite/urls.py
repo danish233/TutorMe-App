@@ -24,12 +24,13 @@ from myapp.views import index, student, tutor, user_type
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    #path('', TemplateView.as_view(template_name="index.html")),
-    #path('index/', views.index, name='index'),
-   # path('', views.index, name='index'),
+    # path('', TemplateView.as_view(template_name="index.html")),
+    # path('index/', views.index, name='index'),
+    # path('', views.index, name='index'),
     path('', views.user_type, name='user_type'),
     path('accounts/', include('allauth.urls')),
     path('accounts/google/student/', views.student, name='student_dashboard'),
+    path('accounts/google/student/session_signup/', views.sign_up_request, name='session_signup'),
     path('accounts/google/tutor/', views.tutor, name='tutor_dashboard'),
     path('accounts/google/tutor/tutor_hours/', views.tutor_hours, name='tutor_hours'),
     path('logout/', LogoutView.as_view()),
