@@ -97,7 +97,7 @@ def tutor(request):
         query = request.GET['q']
         query = str(query)
         term = '1232'  # replace with appropriate term code
-        url = f'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term={term}&subject={query}'
+        url = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term={term}&subject={query}'
         response = requests.get(url)
         data = response.json()
         courses = []
