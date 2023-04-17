@@ -171,13 +171,3 @@ def sign_up_request(request, course_name):
     else:
         tutor_classes = TutorClass.objects.all()
     return render(request, 'sign_up.html', {'tutor_classes': tutor_classes})
-
-
-
-    # tutors = TutorClass.objects.filter(class_name='Probability')
-    # template = loader.get_template('sign_up.html')
-    # context = {
-    #     'tutors_for_classes': tutors
-    # }
-    # return HttpResponse(template.render(context,request))
-
