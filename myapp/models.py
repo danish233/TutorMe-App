@@ -3,15 +3,6 @@ from django.db import models
 from django import forms
 from django.forms import ModelForm, widgets
 
-#Create your models here.
-
-class Tutor(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.user.username if self.user else ''
-
-
 # Create your models here.
 
 class Tutor(models.Model):
