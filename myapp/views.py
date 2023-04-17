@@ -178,7 +178,7 @@ def update_availability(request):
 
         tutor_class, created = TutorClass.objects.update_or_create(
             class_name=class_name,
-            tutor=request.user,
+          #  tutor=request.user,
             defaults={'start_time': start_time, 'end_time': end_time}
         )
 
