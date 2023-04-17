@@ -131,7 +131,7 @@ def tutor_hours(request):
 
         tutor_class = TutorClass(
             class_name=class_name,
-            tutor=request.user,
+            tutor=request.user.username,
             start_time=start_time,
             end_time=end_time,
         )
@@ -139,6 +139,8 @@ def tutor_hours(request):
         tutor_class.save()
 
         return render(request, 'tutor_hours.html', {'class_name': class_name, 'start_time': start_time, 'end_time': end_time})
+    else:
+        return render(request, 'tutor_home.html')
 
 
 def parse(courses, data, query):
