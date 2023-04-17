@@ -4,6 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.contrib.auth.models import Group
 import requests
+from django.template import loader
+from .models import TutorClass, Classes_with_tutors
 import json
 
 
@@ -156,3 +158,16 @@ def parse(courses, data, query):
 
     context = {'courses': courses, 'query': query}
     return context
+
+
+def sign_up_request(request, course_name):
+    if request.method == 'POST':
+        # Get the value of the course_name parameter
+        form_value = request.POST.get('course_name', None)
+        if form_value:
+            tutor_classes = TutorClass.objects.filter(class_name=form_value)
+        else:
+            tutor_classes = TutorClass.objects.all()
+    else:
+        tutor_classes = TutorClass.objects.all()
+    return render(request, 'sign_up.html', {'tutor_classes': tutor_classes})
