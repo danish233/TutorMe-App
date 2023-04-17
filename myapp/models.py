@@ -11,6 +11,14 @@ class Tutor(models.Model):
         return self.user.username
 
 
+class Student(models.Model):
+    user = models.OneToOneField(User,on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.username
+
+
+
 class TutorClass(models.Model):
     class_name = models.CharField(max_length=255)
     # department = models.CharField(max_length=4)
