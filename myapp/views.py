@@ -2,9 +2,10 @@ from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import Group
 import requests
-from .models import TutorClass
+from .models import TutorClass, Tutor
 from django.shortcuts import render
 import json
 
@@ -159,9 +160,10 @@ def parse(courses, data, query):
 
 @login_required
 def tutor_home(request):
-    tutor_classes = TutorClass.objects.filter(tutor=request.user)
-    tutor_requests = TutorRequest.objects.filter(tutor=request.user).select_related('student', 'tutor_class')
-    context = {'tutor_classes': tutor_classes, 'tutor_requests': tutor_requests}
+    #tutor_classes = TutorClass.objects.filter(tutor=request.user)
+    tutor_classes = Tutor.objects.filter(user=request.user)
+    #tutor_requests = TutorRequest.objects.filter(tutor=request.user).select_related('student', 'tutor_class')
+    context = {'tutor_classes': tutor_classes}
     return render(request, 'tutor_home.html', context)
 
 

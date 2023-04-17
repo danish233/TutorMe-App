@@ -9,14 +9,16 @@ class Tutor(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.user.username
+        return self.user.username if self.user else ''
 
 class TutorClass(models.Model):
     class_name = models.CharField(max_length=255)
-    tutor = models.ForeignKey(Tutor, on_delete=models.CASCADE)
+    tutor = models.ForeignKey(Tutor, on_delete=models.CASCADE, default = 1)
     start_time = models.TimeField()
     end_time = models.TimeField()
 
     def __str__(self):
         return self.class_name
+
+
 
