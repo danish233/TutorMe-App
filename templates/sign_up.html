@@ -1,16 +1,24 @@
-<table border='1'>
-  <tr>
-    <th>ClassName</th>
-    <th>Tutor</th>
-    <th>StartTime</th>
-      <th>EndTime</th>
-  </tr>
-  {% for x in tutors_for_classes %}
+<table>
+  <thead>
     <tr>
-      <td>{{ x.class_name }}</td>
-        <td>{{ x.tutor }}</td>
-      <td>{{ x.start_time }}</td>
-    <td>{{ x.end_time }}</td>
+      <th>Class Name</th>
+      <th>Tutor</th>
+      <th>Start Time</th>
+      <th>End Time</th>
     </tr>
-  {% endfor %}
+  </thead>
+  <tbody>
+    {% for tutor_class in tutor_classes %}
+    <tr>
+      <td>{{ tutor_class.class_name }}</td>
+      <td>{{ tutor_class.tutor }}</td>
+      <td>{{ tutor_class.start_time }}</td>
+      <td>{{ tutor_class.end_time }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="4">No tutor classes found.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
 </table>

@@ -161,10 +161,21 @@ def parse(courses, data, query):
 
 
 def sign_up_request(request):
-    tutors = TutorClass.objects.filter(class_name='Probability')
-    template = loader.get_template('sign_up.html')
-    context = {
-        'tutors_for_classes': tutors
-    }
-    return HttpResponse(template.render(context,request))
+    if request.method == 'POST':
+        form_value = request.POST.get('form_name', None)
+        if form_value:
+            tutor_classes = TutorClass.objects.filter(class_name=form_value)
+        else:
+            tutor_classes = TutorClass.objects.all()
+
+    else:
+        tutor_classes = TutorClass.objects.all()
+    return render(request, 'sign_up.html', {'tutor_classes': tutor_classes})
+
+    # tutors = TutorClass.objects.filter(class_name='Probability')
+    # template = loader.get_template('sign_up.html')
+    # context = {
+    #     'tutors_for_classes': tutors
+    # }
+    # return HttpResponse(template.render(context,request))
 
