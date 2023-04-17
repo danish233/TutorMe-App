@@ -160,17 +160,19 @@ def parse(courses, data, query):
     return context
 
 
-def sign_up_request(request):
+def sign_up_request(request, course_name):
     if request.method == 'POST':
-        form_value = request.POST.get('form_name', None)
+        # Get the value of the course_name parameter
+        form_value = request.POST.get('course_name', None)
         if form_value:
             tutor_classes = TutorClass.objects.filter(class_name=form_value)
         else:
             tutor_classes = TutorClass.objects.all()
-
     else:
         tutor_classes = TutorClass.objects.all()
     return render(request, 'sign_up.html', {'tutor_classes': tutor_classes})
+
+
 
     # tutors = TutorClass.objects.filter(class_name='Probability')
     # template = loader.get_template('sign_up.html')

@@ -38,6 +38,7 @@
             <th>Catalog Number</th>
             <th>Component</th>
             <th>Description</th>
+              <th>Request Tutor Session</th>
           </tr>
         </thead>
         <tbody>
@@ -47,6 +48,14 @@
             <td>{{ course.catalog_nbr }}</td>
             <td>{{ course.component }}</td>
             <td>{{ course.descr }}</td>
+ <td>
+              <form method='POST' action="{% url 'session_signup' course_name=course.catalog_nbr %}">
+
+                {% csrf_token %}
+                <input type="hidden" name="course_name" value="{{ course.descr}}">
+                <button type="submit" class="btn btn-primary">Request Tutor Session</button>
+              </form>
+            </td>
           </tr>
           {% endfor %}
         </tbody>

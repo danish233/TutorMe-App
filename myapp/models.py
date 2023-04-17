@@ -13,6 +13,8 @@ class Tutor(models.Model):
 
 class TutorClass(models.Model):
     class_name = models.CharField(max_length=255)
+    # department = models.CharField(max_length=4)
+    # course_number = models.IntegerField(max_length=4)
     tutor = models.ForeignKey(Tutor, on_delete=models.CASCADE)
     start_time = models.TimeField()
     end_time = models.TimeField()
