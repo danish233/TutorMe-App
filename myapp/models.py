@@ -13,7 +13,7 @@ class Tutor(models.Model):
 
 class TutorClass(models.Model):
     class_name = models.CharField(max_length=255)
-    tutor = models.ForeignKey(Tutor, on_delete=models.CASCADE, default = 1)
+  #  tutor = models.ForeignKey(Tutor, on_delete=models.CASCADE, default = 1)
     start_time = models.TimeField()
     end_time = models.TimeField()
 
