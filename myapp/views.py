@@ -1,13 +1,14 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import Group
 import requests
 from django.template import loader
-from .models import TutorClass, Classes_with_tutors
+from .models import TutorClass, Tutor, Classes_with_tutors
+from django.shortcuts import render
 import json
-
 
 @login_required
 def index(request):
@@ -55,7 +56,7 @@ def user_type(request):
         if user_type == 'student':
             return redirect('student_dashboard')
         elif user_type == 'tutor':
-            return redirect('tutor_dashboard')
+            return redirect('tutor_home')  # update this line
     return render(request, 'user_type.html')
 
 
@@ -122,8 +123,6 @@ def tutor(request):
     else:
         return render(request, 'tutor.html')
 
-from django.shortcuts import render
-from .models import TutorClass
 
 def tutor_hours(request):
     if request.method == 'POST':
@@ -133,13 +132,16 @@ def tutor_hours(request):
 
         tutor_class = TutorClass(
             class_name=class_name,
-            tutor=request.user,
+            tutor=request.user.username,
             start_time=start_time,
             end_time=end_time,
         )
-        #tutor_class.save()
+
+        tutor_class.save()
 
         return render(request, 'tutor_hours.html', {'class_name': class_name, 'start_time': start_time, 'end_time': end_time})
+    else:
+        return render(request, 'tutor_home.html')
 
 
 def parse(courses, data, query):
@@ -171,3 +173,28 @@ def sign_up_request(request, course_name):
     else:
         tutor_classes = TutorClass.objects.all()
     return render(request, 'sign_up.html', {'tutor_classes': tutor_classes})
+@login_required
+def tutor_home(request):
+    #tutor_classes = TutorClass.objects.filter(tutor=request.user)
+    tutor_classes = Tutor.objects.filter(user=request.user)
+    #tutor_requests = TutorRequest.objects.filter(tutor=request.user).select_related('student', 'tutor_class')
+    context = {'tutor_classes': tutor_classes}
+    return render(request, 'tutor_home.html', context)
+
+
+@login_required
+def update_availability(request):
+    if request.method == 'POST':
+        class_name = request.POST.get('class_name')
+        start_time = request.POST.get('start_time')
+        end_time = request.POST.get('end_time')
+
+        tutor_class, created = TutorClass.objects.update_or_create(
+            class_name=class_name,
+          #  tutor=request.user,
+            defaults={'start_time': start_time, 'end_time': end_time}
+        )
+
+        return redirect('tutor_home')
+    else:
+        return HttpResponseNotAllowed(['POST'])
