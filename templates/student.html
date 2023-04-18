@@ -52,7 +52,8 @@
               <form method='POST' action="{% url 'session_signup' course_name=course.catalog_nbr %}">
 
                 {% csrf_token %}
-                <input type="hidden" name="course_name" value="{{ course.descr}}">
+                <input type="hidden" name="course_subject" value="{{ course.subject }}">
+                <input type="hidden" name="course_catalog_nbr" value="{{ course.catalog_nbr }}">
                 <button type="submit" class="btn btn-primary">Request Tutor Session</button>
               </form>
             </td>

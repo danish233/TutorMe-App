@@ -31,18 +31,34 @@
             <th>Tutor</th>
             <th>Start Time</th>
             <th>End Time</th>
+              <th>Request Session</th>
           </tr>
         </thead>
         <tbody>
+          {% for tutor_class in tutor_classes %}
+          <tr>
+            <td>{{ tutor_class.class_name }}</td>
+            <td>{{ tutor_class.tutor }}</td>
+            <td>{{ tutor_class.start_time }}</td>
+            <td>{{ tutor_class.end_time }}</td>
+         <td> <form method='POST' action="{% url 'request_confirmation' course_name=tutor_class.class_name %}">
 
 
+                {% csrf_token %}
+                <input type="hidden" name="class_name" value="{{ tutor_class.class_name}}">
+                 <input type="hidden" name="tutor" value="{{ tutor_class.tutor}}">
+                <button type="submit" class="btn btn-primary">Submit Tutor Request</button>
+              </form></td>
 
+          </tr>
+          {% empty %}
 
           <tr>
             <td colspan="4">No tutor classes found.</td>
           </tr>
 
         </tbody>
+          {% endfor %}
       </table>
     </div>
     {% bootstrap_javascript %}
