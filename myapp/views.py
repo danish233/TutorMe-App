@@ -150,15 +150,19 @@ def tutor_hours(request):
 def student_request_confirmation(request, course_name):
     if request.method == 'POST':
         class_name = request.POST.get('class_name')
+        print(class_name)
         tutor_for_session = request.POST.get('tutor')
+        print(tutor_for_session)
+        stud = request.user.username
+        print(stud)
 
         session_request = Session_Request(
             class_name=class_name,
             tutor_for_session=tutor_for_session,
-            student=request.user.username
+            student=stud
         )
         session_request.save()
-        return render(request, 'request_submitted.html', {'class_name' : class_name, 'tutor_for_session': tutor_for_session})
+        return render(request, 'request_submitted.html', {'class_name' : class_name, 'tutor_for_session': tutor_for_session, 'student': stud})
     else:
         return render(request, 'student.html')
 
@@ -202,8 +206,9 @@ def sign_up_request(request, course_name):
 def tutor_home(request):
     # tutor_classes = TutorClass.objects.filter(tutor=request.user)
     tutor_classes = TutorClass.objects.filter(tutor=request.user.username)
+    Session_Requests = Session_Request.objects.all()
     # tutor_requests = TutorRequest.objects.filter(tutor=request.user).select_related('student', 'tutor_class')
-    context = {'tutor_classes': tutor_classes}
+    context = {'tutor_classes': tutor_classes, 'session_requests': Session_Requests}
     return render(request, 'tutor_home.html', context)
 
 

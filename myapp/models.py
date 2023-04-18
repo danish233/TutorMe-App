@@ -40,4 +40,8 @@ class Session_Request(models.Model):
     class_name = models.CharField(max_length=225)
     tutor_for_session = models.CharField(max_length=50)
     student = models.CharField(max_length=225)
+    status = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.student
 
