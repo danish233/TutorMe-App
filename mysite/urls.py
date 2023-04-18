@@ -30,6 +30,7 @@ urlpatterns = [
     path('accounts/google/student/', views.student, name='student_dashboard'),
 
     path('accounts/google/student/session_signup/<str:course_name>/', views.sign_up_request, name='session_signup'),
+    path('accounts/google/student/session_signup/<str:course_name>/request_confirmation/', views.student_request_confirmation, name='request_confirmation'),
     path('accounts/google/tutor/', views.tutor, name='tutor_dashboard'),
     path('accounts/google/tutor/tutor_hours/', views.tutor_hours, name='tutor_hours'),
     path('accounts/google/tutor/home/', views.tutor_home, name='tutor_home'),

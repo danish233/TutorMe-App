@@ -6,9 +6,10 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import Group
 import requests
 from django.template import loader
-from .models import TutorClass, Tutor, Classes_with_tutors
+from .models import TutorClass, Tutor, Classes_with_tutors, Session_Request
 from django.shortcuts import render
 import json
+
 
 @login_required
 def index(request):
@@ -71,7 +72,7 @@ def student(request):
         courses = []
         context = parse(courses, data, query)
 
-        #no courses found, try searching by course number
+        # no courses found, try searching by course number
         if not courses:
             url = f'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term={term}&catalog_nbr={query}'
             response = requests.get(url)
@@ -79,7 +80,7 @@ def student(request):
             courses = []
             context = parse(courses, data, query)
 
-        #no courses found, try searching by description
+        # no courses found, try searching by description
         if not courses:
             url = f'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term={term}&keyword={query}'
             response = requests.get(url)
@@ -90,6 +91,7 @@ def student(request):
         return render(request, 'student.html', context)
     else:
         return render(request, 'student.html')
+
 
 @login_required
 def tutor(request):
@@ -103,7 +105,7 @@ def tutor(request):
         courses = []
         context = parse(courses, data, query)
 
-        #no courses found, try searching by course number
+        # no courses found, try searching by course number
         if not courses:
             url = f'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term={term}&catalog_nbr={query}'
             response = requests.get(url)
@@ -111,14 +113,14 @@ def tutor(request):
             courses = []
             context = parse(courses, data, query)
 
-        #no courses found, try searching by description
+        # no courses found, try searching by description
         if not courses:
             url = f'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term={term}&keyword={query}'
             response = requests.get(url)
             data = response.json()
             courses = []
             context = parse(courses, data, query)
-        
+
         return render(request, 'tutor.html', context)
     else:
         return render(request, 'tutor.html')
@@ -139,9 +141,26 @@ def tutor_hours(request):
 
         tutor_class.save()
 
-        return render(request, 'tutor_hours.html', {'class_name': class_name, 'start_time': start_time, 'end_time': end_time})
+        return render(request, 'tutor_hours.html',
+                      {'class_name': class_name, 'start_time': start_time, 'end_time': end_time})
     else:
         return render(request, 'tutor_home.html')
+
+
+def student_request_confirmation(request, course_name):
+    if request.method == 'POST':
+        class_name = request.POST.get('class_name')
+        tutor_for_session = request.POST.get('tutor')
+
+        session_request = Session_Request(
+            class_name=class_name,
+            tutor_for_session=tutor_for_session,
+            student=request.user.username
+        )
+        session_request.save()
+        return render(request, 'request_submitted.html', {'class_name' : class_name, 'tutor_for_session': tutor_for_session})
+    else:
+        return render(request, 'student.html')
 
 
 def parse(courses, data, query):
@@ -173,11 +192,13 @@ def sign_up_request(request, course_name):
     else:
         tutor_classes = TutorClass.objects.all()
     return render(request, 'sign_up.html', {'tutor_classes': tutor_classes})
+
+
 @login_required
 def tutor_home(request):
-    #tutor_classes = TutorClass.objects.filter(tutor=request.user)
+    # tutor_classes = TutorClass.objects.filter(tutor=request.user)
     tutor_classes = Tutor.objects.filter(user=request.user)
-    #tutor_requests = TutorRequest.objects.filter(tutor=request.user).select_related('student', 'tutor_class')
+    # tutor_requests = TutorRequest.objects.filter(tutor=request.user).select_related('student', 'tutor_class')
     context = {'tutor_classes': tutor_classes}
     return render(request, 'tutor_home.html', context)
 
@@ -191,7 +212,7 @@ def update_availability(request):
 
         tutor_class, created = TutorClass.objects.update_or_create(
             class_name=class_name,
-          #  tutor=request.user,
+            #  tutor=request.user,
             defaults={'start_time': start_time, 'end_time': end_time}
         )
 
