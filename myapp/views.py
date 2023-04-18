@@ -164,7 +164,8 @@ def student_request_confirmation(request, course_name):
             student=stud
         )
         session_request.save()
-        return render(request, 'request_submitted.html', {'class_name' : class_name, 'tutor_for_session': tutor_for_session, 'student': stud})
+        #return render(request, 'request_submitted.html', {'class_name' : class_name, 'tutor_for_session': tutor_for_session, 'student': stud})
+        return redirect('student_home')
     else:
         return render(request, 'student.html')
 
@@ -208,10 +209,19 @@ def sign_up_request(request, course_name):
 def tutor_home(request):
     # tutor_classes = TutorClass.objects.filter(tutor=request.user)
     tutor_classes = TutorClass.objects.filter(tutor=request.user.username)
-    Session_Requests = Session_Request.objects.all()
+    Session_Requests = Session_Request.objects.filter(tutor_for_session=request.user.username)
     # tutor_requests = TutorRequest.objects.filter(tutor=request.user).select_related('student', 'tutor_class')
     context = {'tutor_classes': tutor_classes, 'session_requests': Session_Requests}
     return render(request, 'tutor_home.html', context)
+
+@login_required
+def student_home(request):
+    # tutor_classes = TutorClass.objects.filter(tutor=request.user)
+    #tutor_classes = TutorClass.objects.filter(tutor=request.user.username)
+    Session_Requests = Session_Request.objects.filter(student=request.user.username)
+    # tutor_requests = TutorRequest.objects.filter(tutor=request.user).select_related('student', 'tutor_class')
+    context = {'session_requests': Session_Requests}
+    return render(request, 'student_home.html', context)
 
 
 @login_required
@@ -243,11 +253,30 @@ def approve_request(request):
             class_name=class_name,
             student=student,
         )
-        print(req)
         for r in req:
             r.status = True
             r.save()
-        
+
         return redirect('tutor_home')
+    else:
+        return HttpResponseNotAllowed(['POST'])
+
+@login_required
+def connect(request):
+    if request.method == 'POST':
+        student = request.POST.get('student')
+        class_name = request.POST.get('class_name')
+
+        req = Session_Request.objects.filter(
+            class_name=class_name,
+            student=student,
+        )
+        #for r in req:
+
+            #display contact information
+
+        context = {}
+
+        return render(request, 'connect.html', context)
     else:
         return HttpResponseNotAllowed(['POST'])
