@@ -184,9 +184,13 @@ def parse(courses, data, query):
 def sign_up_request(request, course_name):
     if request.method == 'POST':
         # Get the value of the course_name parameter
-        form_value = request.POST.get('course_name', None)
-        if form_value:
-            tutor_classes = TutorClass.objects.filter(class_name=form_value)
+        subject = request.POST.get('course_subject')
+        class_number = request.POST.get('course_catalog_nbr')
+        full_name = str(subject) + " " + str(class_number)
+        print(full_name)
+
+        if full_name:
+            tutor_classes = TutorClass.objects.filter(class_name=full_name)
         else:
             tutor_classes = TutorClass.objects.all()
     else:
@@ -212,7 +216,7 @@ def update_availability(request):
 
         tutor_class, created = TutorClass.objects.update_or_create(
             class_name=class_name,
-            #  tutor=request.user,
+            tutor=request.user.username,
             defaults={'start_time': start_time, 'end_time': end_time}
         )
 
