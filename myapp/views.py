@@ -197,7 +197,7 @@ def sign_up_request(request, course_name):
 @login_required
 def tutor_home(request):
     # tutor_classes = TutorClass.objects.filter(tutor=request.user)
-    tutor_classes = Tutor.objects.filter(user=request.user)
+    tutor_classes = TutorClass.objects.filter(tutor=request.user.username)
     # tutor_requests = TutorRequest.objects.filter(tutor=request.user).select_related('student', 'tutor_class')
     context = {'tutor_classes': tutor_classes}
     return render(request, 'tutor_home.html', context)
