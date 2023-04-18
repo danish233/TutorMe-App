@@ -131,10 +131,12 @@ def tutor_hours(request):
         class_name = request.POST.get('class_name')
         start_time = request.POST.get('start_time')
         end_time = request.POST.get('end_time')
+        rate = request.POST.get('rate')
 
         tutor_class = TutorClass(
             class_name=class_name,
             tutor=request.user.username,
+            rate=rate,
             start_time=start_time,
             end_time=end_time,
         )
@@ -218,13 +220,34 @@ def update_availability(request):
         class_name = request.POST.get('class_name')
         start_time = request.POST.get('start_time')
         end_time = request.POST.get('end_time')
+        new_rate = request.POST.get('rate')
 
         tutor_class, created = TutorClass.objects.update_or_create(
             class_name=class_name,
             tutor=request.user.username,
+            rate=new_rate,
             defaults={'start_time': start_time, 'end_time': end_time}
         )
 
+        return redirect('tutor_home')
+    else:
+        return HttpResponseNotAllowed(['POST'])
+
+@login_required
+def approve_request(request):
+    if request.method == 'POST':
+        student = request.POST.get('student')
+        class_name = request.POST.get('class_name')
+
+        req = Session_Request.objects.filter(
+            class_name=class_name,
+            student=student,
+        )
+        print(req)
+        for r in req:
+            r.status = True
+            r.save()
+        
         return redirect('tutor_home')
     else:
         return HttpResponseNotAllowed(['POST'])

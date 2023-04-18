@@ -16,6 +16,7 @@
           <th>Class Name</th>
           <th>Start Time</th>
           <th>End Time</th>
+          <th>Rate (USD)</th>
         </tr>
       </thead>
       <tbody>
@@ -24,6 +25,7 @@
           <td>{{ tc.class_name }}</td>
           <td>{{ tc.start_time }}</td>
           <td>{{ tc.end_time }}</td>
+          <td>{{ tc.rate }}</td>
         </tr>
         {% empty %}
         <tr>
@@ -45,6 +47,10 @@
         <div class="form-group">
           <label for="end_time">End Time:</label>
           <input type="time" class="form-control" id="end_time" name="end_time" required>
+        </div>
+        <div class="form-group">
+          <label for="rate">Hourly Rate (USD): </label>
+          <input type="number" class="form-control" id="rate" name="rate" required>
         </div>
         <button type="submit" class="btn btn-primary">Update Availability</button>
       </form>
@@ -70,7 +76,14 @@
       <td>{{ request.student }}</td>
       <td>{{ request.class_name }}</td>
       <td>{{ request.status }}</td>
-      <td>{{ request.created_at }}</td>
+        <td>
+          <form method="POST" action="{% url 'approve_request' %}">
+            {% csrf_token %}
+            <input type="hidden" name="student" value="{{ request.student }}">
+            <input type="hidden" name="class_name" value="{{ request.class_name }}">
+            <button type="submit" class="btn btn-primary">Approve Request</button>
+          </form>
+        </td>
     </tr>
     {% endfor %}
   </tbody>

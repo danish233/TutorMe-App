@@ -22,6 +22,7 @@ class Student(models.Model):
 class TutorClass(models.Model):
     class_name = models.CharField(max_length=255)
     tutor = models.CharField(max_length=255)
+    rate = models.IntegerField(default=0)
     start_time = models.TimeField()
     end_time = models.TimeField()
 
