@@ -272,7 +272,7 @@ def approve_request(request):
             send_mail(
                 'Session Request Approved',
                 f'Hello {student}, your session request for {class_name} has been approved by {tutor_name}. Contact details for the tutor are: Email: {tutor_email}',
-                'your_email_address',
+                'tutormea24@outlook.com',
                 [student_email],
                 fail_silently=False,
             )

@@ -40,3 +40,7 @@ urlpatterns = [
     path('logout/', LogoutView.as_view()),
 
 ]
+
+admin.site.site_header = 'TutorMe Admin Dashboard'
+admin.site.index_title = 'TutorMe Administration'
+admin.site.site_title = 'TutorMe'
