@@ -265,17 +265,23 @@ def approve_request(request):
             r.status = True
             r.save()
 
-            tutor_name = Session_Request.tutor_for_session
-            tutor_email = request.user.email
-            student_email = Session_Request.email
+        session_request = Session_Request.objects.get(student=student, class_name=class_name)
 
-            send_mail(
-                'Session Request Approved',
-                f'Hello {student}, your session request for {class_name} has been approved by {tutor_name}. Contact details for the tutor are: Email: {tutor_email}',
-                'tutormea24@outlook.com',
-                [student_email],
-                fail_silently=False,
-            )
+        tutor_name = session_request.tutor_for_session
+        tutor_email = request.user.email
+        student_email = session_request.email
+
+        print(student_email)
+        print(tutor_email)
+        print(tutor_name)
+
+        send_mail(
+            'Session Request Approved',
+            f'Hello {student}, your session request for {class_name} has been approved by {tutor_name}. Contact details for the tutor are: Email: {tutor_email}',
+            'tutormea24@outlook.com',
+            [student_email],
+            fail_silently=False,
+        )
 
         return redirect('tutor_home')
     else:

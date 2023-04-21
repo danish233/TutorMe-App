@@ -50,3 +50,6 @@ class Session_Request(models.Model):
     def __str__(self):
         return self.student
 
+    def __str__(self):
+        return self.email
+
