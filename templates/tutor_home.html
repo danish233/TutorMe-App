@@ -17,6 +17,8 @@
           <th>Start Time</th>
           <th>End Time</th>
           <th>Rate (USD)</th>
+          <th>Tutoring Type</th>
+          <th>Days</th>
         </tr>
       </thead>
       <tbody>
@@ -26,10 +28,12 @@
           <td>{{ tc.start_time }}</td>
           <td>{{ tc.end_time }}</td>
           <td>{{ tc.rate }}</td>
+          <td>{{ tc.tutoring_type }}</td>
+          <td>{{ tc.days }}</td>
         </tr>
         {% empty %}
         <tr>
-          <td colspan="3">You have not chosen any classes yet.</td>
+          <td colspan="6">You have not chosen any classes yet.</td>
         </tr>
         {% endfor %}
 
@@ -52,9 +56,29 @@
           <label for="rate">Hourly Rate (USD): </label>
           <input type="number" class="form-control" id="rate" name="rate" required>
         </div>
+        <div class="form-group">
+          <label for="tutoring_type">Tutoring Type:</label><br>
+          <input type="radio" id="online" name="tutoring_type" value="Online" required>
+          <label for="online">Online</label><br>
+          <input type="radio" id="in_person" name="tutoring_type" value="In-person" required>
+          <label for="in_person">In-person</label><br>
+        </div>
+        <div class="form-group">
+          <label for="days">Available Days:</label>
+          <select class="form-control" id="days" name="days" multiple required>
+            <option value="Monday">Monday</option>
+            <option value="Tuesday">Tuesday</option>
+            <option value="Wednesday">Wednesday</option>
+            <option value="Thursday">Thursday</option>
+            <option value="Friday">Friday</option>
+            <option value="Saturday">Saturday</option>
+            <option value="Sunday">Sunday</option>
+          </select>
+        </div>
         <button type="submit" class="btn btn-primary">Update Availability</button>
       </form>
       </tbody>
+
     </table>
     <a href="{% url 'tutor_dashboard' %}">Go to Tutor Dashboard</a>
   </div>

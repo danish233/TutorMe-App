@@ -25,9 +25,12 @@ class TutorClass(models.Model):
     rate = models.IntegerField(default=0)
     start_time = models.TimeField()
     end_time = models.TimeField()
+    tutoring_type = models.CharField(max_length=20, choices=[('online', 'Online'), ('in_person', 'In Person')])
+    days = models.CharField(max_length=50)
 
     def __str__(self):
         return self.class_name
+
 
 
 class Classes_with_tutors(models.Model):

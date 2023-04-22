@@ -8,6 +8,7 @@ import requests
 from django.template import loader
 from .models import TutorClass, Tutor, Classes_with_tutors, Session_Request
 from django.shortcuts import render
+from django.contrib import messages
 import json
 
 
@@ -132,6 +133,9 @@ def tutor_hours(request):
         start_time = request.POST.get('start_time')
         end_time = request.POST.get('end_time')
         rate = request.POST.get('rate')
+        tutoring_type = request.POST.get('tutoring_type')
+        days = request.POST.getlist('days[]')
+        days_str = ", ".join(days)
 
         tutor_class = TutorClass(
             class_name=class_name,
@@ -139,14 +143,16 @@ def tutor_hours(request):
             rate=rate,
             start_time=start_time,
             end_time=end_time,
+            tutoring_type=tutoring_type,
+            days=days_str,
         )
 
         tutor_class.save()
 
-        return render(request, 'tutor_hours.html',
-                      {'class_name': class_name, 'start_time': start_time, 'end_time': end_time})
-    else:
-        return render(request, 'tutor_home.html')
+        messages.success(request, 'Tutoring hours added successfully!')
+        return render(request, 'tutor_hours.html')
+
+    return render(request, 'tutor_hours.html')
 
 
 def student_request_confirmation(request, course_name):
@@ -231,17 +237,25 @@ def update_availability(request):
         start_time = request.POST.get('start_time')
         end_time = request.POST.get('end_time')
         new_rate = request.POST.get('rate')
+        tutoring_type = request.POST.get('tutoring_type')
+        days = request.POST.get('days')
 
         tutor_class, created = TutorClass.objects.update_or_create(
             class_name=class_name,
             tutor=request.user.username,
             rate=new_rate,
-            defaults={'start_time': start_time, 'end_time': end_time}
+            defaults={
+                'start_time': start_time,
+                'end_time': end_time,
+                'tutoring_type': tutoring_type,
+                'days': days
+            }
         )
 
         return redirect('tutor_home')
     else:
         return HttpResponseNotAllowed(['POST'])
+
 
 @login_required
 def approve_request(request):

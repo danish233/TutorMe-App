@@ -57,6 +57,31 @@
               <input type="time" name="start_time" required>
               <label for="end_time">To:</label>
               <input type="time" name="end_time" required>
+
+              <br>
+              <label>Tutoring Type:</label>
+              <input type="radio" id="in_person" name="tutoring_type" value="in_person" required>
+              <label for="in_person">In Person</label>
+              <input type="radio" id="online" name="tutoring_type" value="online">
+              <label for="online">Online</label>
+              <br>
+              <label>Available Days:</label>
+              <input type="checkbox" id="monday" name="days[]" value="Monday">
+              <label for="monday">Monday</label>
+              <input type="checkbox" id="tuesday" name="days[]" value="Tuesday">
+              <label for="tuesday">Tuesday</label>
+              <input type="checkbox" id="wednesday" name="days[]" value="Wednesday">
+              <label for="wednesday">Wednesday</label>
+              <input type="checkbox" id="thursday" name="days[]" value="Thursday">
+              <label for="thursday">Thursday</label>
+              <input type="checkbox" id="friday" name="days[]" value="Friday">
+              <label for="friday">Friday</label>
+              <input type="checkbox" id="saturday" name="days[]" value="Saturday">
+              <label for="saturday">Saturday</label>
+              <input type="checkbox" id="sunday" name="days[]" value="Sunday">
+              <label for="sunday">Sunday</label>
+              <br>
+
               <button type="submit" class="btn btn-primary">Sign Up</button>
             </form>
           </td>
