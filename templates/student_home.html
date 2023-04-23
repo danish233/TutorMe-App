@@ -16,6 +16,7 @@
       <th>Class</th>
       <th>Approved</th>
       <th>Status</th>
+      <th>Delete</th>
     </tr>
   </thead>
   <tbody>
@@ -36,6 +37,14 @@
             <p>Not Approved</p>
           {% endif %}
         </td>
+        <td>
+          <form method="POST" action="{% url 'delete_request' %}">
+            {% csrf_token %}
+            <input type="hidden" name="student" value="{{ request.student }}">
+            <input type="hidden" name="class_name" value="{{ request.class_name }}">
+            <button type="submit" class="btn btn-primary ">Delete Session Request</button>
+          </form>
+        </td>
     </tr>
     {% endfor %}
   </tbody>
@@ -47,5 +56,3 @@
 
  <a href="{% url 'student_dashboard' %}">Go back to student dashboard</a>
 </html>
-
-

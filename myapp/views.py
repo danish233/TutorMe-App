@@ -6,6 +6,8 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import Group
 import requests
 from django.template import loader
+from django.views.decorators.http import require_POST
+
 from .models import TutorClass, Tutor, Classes_with_tutors, Session_Request, Student
 from django.shortcuts import render
 from django.core.mail import send_mail
@@ -226,6 +228,14 @@ def student_home(request):
     # tutor_requests = TutorRequest.objects.filter(tutor=request.user).select_related('student', 'tutor_class')
     context = {'session_requests': Session_Requests}
     return render(request, 'student_home.html', context)
+
+@login_required
+@require_POST
+def delete_request(request):
+    student = request.POST['student']
+    class_name = request.POST['class_name']
+    Session_Request.objects.filter(student=student, class_name=class_name).delete()
+    return redirect('student_home')
 
 
 @login_required
