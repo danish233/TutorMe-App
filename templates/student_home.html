@@ -15,7 +15,7 @@
       <th>Student</th>
       <th>Class</th>
       <th>Approved</th>
-      <th>Contact Info</th>
+      <th>Status</th>
     </tr>
   </thead>
   <tbody>
@@ -30,7 +30,7 @@
             {% csrf_token %}
             <input type="hidden" name="student" value="{{ request.student }}">
             <input type="hidden" name="class_name" value="{{ request.class_name }}">
-            <button type="submit" class="btn btn-primary">Connect</button>
+            <p>Email sent, check your inbox</p>
             </form>
           {% else %}
             <p>Not Approved</p>

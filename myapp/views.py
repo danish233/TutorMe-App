@@ -6,9 +6,11 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import Group
 import requests
 from django.template import loader
-from .models import TutorClass, Tutor, Classes_with_tutors, Session_Request
+from .models import TutorClass, Tutor, Classes_with_tutors, Session_Request, Student
 from django.shortcuts import render
+from django.core.mail import send_mail
 import json
+from django.core.mail import send_mail, EmailMessage
 
 
 @login_required
@@ -161,9 +163,11 @@ def student_request_confirmation(request, course_name):
         session_request = Session_Request(
             class_name=class_name,
             tutor_for_session=tutor_for_session,
-            student=stud
+            student=stud,
+            email=request.user.email
         )
         session_request.save()
+        print(session_request.email)
         #return render(request, 'request_submitted.html', {'class_name' : class_name, 'tutor_for_session': tutor_for_session, 'student': stud})
         return redirect('student_home')
     else:
@@ -243,6 +247,10 @@ def update_availability(request):
     else:
         return HttpResponseNotAllowed(['POST'])
 
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+
 @login_required
 def approve_request(request):
     if request.method == 'POST':
@@ -256,6 +264,24 @@ def approve_request(request):
         for r in req:
             r.status = True
             r.save()
+
+        session_request = Session_Request.objects.get(student=student, class_name=class_name)
+
+        tutor_name = session_request.tutor_for_session
+        tutor_email = request.user.email
+        student_email = session_request.email
+
+        print(student_email)
+        print(tutor_email)
+        print(tutor_name)
+
+        send_mail(
+            'Session Request Approved',
+            f'Hello {student}, your session request for {class_name} has been approved by {tutor_name}. Contact details for the tutor are: Email: {tutor_email}',
+            'tutormea24@outlook.com',
+            [student_email],
+            fail_silently=False,
+        )
 
         return redirect('tutor_home')
     else:
