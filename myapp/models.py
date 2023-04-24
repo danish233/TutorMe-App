@@ -53,3 +53,6 @@ class Session_Request(models.Model):
     def __str__(self):
         return self.email
 
+    def delete_request(self):
+        self.delete()
+
