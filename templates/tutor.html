@@ -7,33 +7,27 @@
     {% bootstrap_css %}
   </head>
   <body>
-   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Tutor Me</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <form class="form-inline my-2 my-lg-0" action="{% url 'tutor_dashboard' %}" method="get">
-            <input class="form-control mr-sm-2" type="search" name="q" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-          </form>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'tutor_home' %}">Tutor Home</a>
-        </li>
-        <li class="nav-item">
-          <form class="form-inline" action="{% url 'logout' %}" method="post">
-            {% csrf_token %}
-            <button class="btn btn-outline-danger my-2 my-sm-0" type="submit">Logout</button>
-          </form>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Tutor Me</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <form class="form-inline my-2 my-lg-0" action="{% url 'tutor_dashboard' %}" method="get">
+                <input class="form-control mr-sm-2" type="search" name="q" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+              </form>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'tutor_home' %}">Tutor Home</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
     <div class="container my-4">
       {% if courses %}
       <h3 class="mb-4">Results for "{{ query }}"</h3>
@@ -63,6 +57,31 @@
               <input type="time" name="start_time" required>
               <label for="end_time">To:</label>
               <input type="time" name="end_time" required>
+
+              <br>
+              <label>Tutoring Type:</label>
+              <input type="radio" id="in_person" name="tutoring_type" value="in_person" required>
+              <label for="in_person">In Person</label>
+              <input type="radio" id="online" name="tutoring_type" value="online">
+              <label for="online">Online</label>
+              <br>
+              <label>Available Days:</label>
+              <input type="checkbox" id="monday" name="days[]" value="Monday">
+              <label for="monday">Monday</label>
+              <input type="checkbox" id="tuesday" name="days[]" value="Tuesday">
+              <label for="tuesday">Tuesday</label>
+              <input type="checkbox" id="wednesday" name="days[]" value="Wednesday">
+              <label for="wednesday">Wednesday</label>
+              <input type="checkbox" id="thursday" name="days[]" value="Thursday">
+              <label for="thursday">Thursday</label>
+              <input type="checkbox" id="friday" name="days[]" value="Friday">
+              <label for="friday">Friday</label>
+              <input type="checkbox" id="saturday" name="days[]" value="Saturday">
+              <label for="saturday">Saturday</label>
+              <input type="checkbox" id="sunday" name="days[]" value="Sunday">
+              <label for="sunday">Sunday</label>
+              <br>
+
               <button type="submit" class="btn btn-primary">Sign Up</button>
             </form>
           </td>
