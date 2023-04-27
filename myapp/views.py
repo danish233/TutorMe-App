@@ -65,7 +65,7 @@ def user_type(request):
             return redirect('tutor_home')  # update this line
     return render(request, 'user_type.html')
 
-
+@login_required
 def student(request):
     if 'q' in request.GET:
         courses = []
@@ -148,7 +148,7 @@ def tutor(request):
     else:
         return render(request, 'tutor.html')
 
-
+@login_required
 def tutor_hours(request):
     if request.method == 'POST':
         class_name = request.POST.get('class_name')
@@ -176,7 +176,7 @@ def tutor_hours(request):
 
     return render(request, 'tutor_hours.html')
 
-
+@login_required
 def student_request_confirmation(request, course_name):
     if request.method == 'POST':
         class_name = request.POST.get('class_name')
@@ -199,7 +199,6 @@ def student_request_confirmation(request, course_name):
     else:
         return render(request, 'student.html')
 
-
 def parse(courses, data, query):
     for c in data:
         if query.lower() in c['subject'].lower() or query.lower() in c['catalog_nbr'].lower() or \
@@ -217,7 +216,7 @@ def parse(courses, data, query):
     context = {'courses': courses, 'query': query}
     return context
 
-
+@login_required
 def sign_up_request(request, course_name):
     if request.method == 'POST':
         # Get the value of the course_name parameter
