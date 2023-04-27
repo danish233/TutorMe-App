@@ -71,6 +71,9 @@ def student(request):
         query = request.GET['q']
         query = str(query)
         term = '1232'  # replace with appropriate term code
+        #uppercase query for subject searching
+        query = query.upper()
+        #Try searching by subject
         url = f'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term={term}&subject={query}'
         response = requests.get(url)
         data = response.json()
@@ -104,6 +107,9 @@ def tutor(request):
         query = request.GET['q']
         query = str(query)
         term = '1232'  # replace with appropriate term code
+        # uppercase query for subject searching
+        query = query.upper()
+        # Try searching by subject
         url = f'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term={term}&subject={query}'
         response = requests.get(url)
         data = response.json()
