@@ -173,7 +173,7 @@ def tutor_hours(request):
 
 
         messages.success(request, 'Tutoring hours added successfully!')
-        return render(request, 'tutor_hours.html', {'class_name': class_name, 'start_time': start_time, 'end_time': end_time})
+        return render(request, 'tutor_hours.html', {'class_name': class_name, 'start_time': start_time, 'end_time': end_time, 'days_str': days_str, 'tutoring_type': tutoring_type})
 
     return render(request, 'tutor_hours.html')
 
