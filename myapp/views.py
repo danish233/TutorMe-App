@@ -74,7 +74,7 @@ def student(request):
         term = '1232'  # replace with appropriate term code
         #Try searching by subject + course number
         subandcode = query.upper().split(' ')
-        if len(subandcode) is 2:
+        if len(subandcode) == 2:
             url = f'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term={term}&subject={subandcode[0]}&catalog_nbr={subandcode[1]}'
             response = requests.get(url)
             data = response.json()
@@ -116,7 +116,7 @@ def tutor(request):
         term = '1232'  # replace with appropriate term code
         # Try searching by subject + course number
         subandcode = query.upper().split(' ')
-        if len(subandcode) is 2:
+        if len(subandcode) == 2:
             url = f'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term={term}&subject={subandcode[0]}&catalog_nbr={subandcode[1]}'
             response = requests.get(url)
             data = response.json()
@@ -168,24 +168,22 @@ def tutor_hours(request):
             tutoring_type=tutoring_type,
             days=days_str,
         )
+        #prevent duplicate availability slots
+        if not TutorClass.objects.filter(class_name=class_name, tutor=request.user.username, rate=rate, start_time=start_time, end_time=end_time, tutoring_type=tutoring_type, days=days_str,):
+            tutor_class.save()
 
-        tutor_class.save()
 
-
-        messages.success(request, 'Tutoring hours added successfully!')
-        return render(request, 'tutor_hours.html', {'class_name': class_name, 'start_time': start_time, 'end_time': end_time})
+        #messages.success(request, 'Tutoring hours added successfully!')
+        return render(request, 'tutor_hours.html', {'class_name': class_name, 'start_time': start_time, 'end_time': end_time, 'days_str': days_str, 'tutoring_type': tutoring_type})
 
     return render(request, 'tutor_hours.html')
 
 @login_required
-def student_request_confirmation(request, course_name):
+def student_request_confirmation(request , course_name):
     if request.method == 'POST':
         class_name = request.POST.get('class_name')
-        print(class_name)
         tutor_for_session = request.POST.get('tutor')
-        print(tutor_for_session)
         stud = request.user.username
-        print(stud)
 
         session_request = Session_Request(
             class_name=class_name,
@@ -193,8 +191,8 @@ def student_request_confirmation(request, course_name):
             student=stud,
             email=request.user.email
         )
-        session_request.save()
-        print(session_request.email)
+        if not Session_Request.objects.filter(class_name=class_name, tutor_for_session=tutor_for_session, student=stud, email=request.user.email):
+            session_request.save()
         return redirect('student_home')
     else:
         return render(request, 'student.html')
