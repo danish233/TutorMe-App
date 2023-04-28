@@ -168,8 +168,9 @@ def tutor_hours(request):
             tutoring_type=tutoring_type,
             days=days_str,
         )
-
-        tutor_class.save()
+        #prevent duplicate availability slots
+        if not TutorClass.objects.filter(class_name=class_name, tutor=request.user.username, rate=rate, start_time=start_time, end_time=end_time, tutoring_type=tutoring_type, days=days_str,):
+            tutor_class.save()
 
 
         #messages.success(request, 'Tutoring hours added successfully!')
@@ -178,14 +179,11 @@ def tutor_hours(request):
     return render(request, 'tutor_hours.html')
 
 @login_required
-def student_request_confirmation(request, course_name):
+def student_request_confirmation(request , course_name):
     if request.method == 'POST':
         class_name = request.POST.get('class_name')
-        print(class_name)
         tutor_for_session = request.POST.get('tutor')
-        print(tutor_for_session)
         stud = request.user.username
-        print(stud)
 
         session_request = Session_Request(
             class_name=class_name,
@@ -193,8 +191,8 @@ def student_request_confirmation(request, course_name):
             student=stud,
             email=request.user.email
         )
-        session_request.save()
-        print(session_request.email)
+        if not Session_Request.objects.filter(class_name=class_name, tutor_for_session=tutor_for_session, student=stud, email=request.user.email):
+            session_request.save()
         return redirect('student_home')
     else:
         return render(request, 'student.html')
