@@ -74,7 +74,7 @@ def student(request):
         term = '1232'  # replace with appropriate term code
         #Try searching by subject + course number
         subandcode = query.upper().split(' ')
-        if len(subandcode) is 2:
+        if len(subandcode) == 2:
             url = f'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term={term}&subject={subandcode[0]}&catalog_nbr={subandcode[1]}'
             response = requests.get(url)
             data = response.json()
@@ -116,7 +116,7 @@ def tutor(request):
         term = '1232'  # replace with appropriate term code
         # Try searching by subject + course number
         subandcode = query.upper().split(' ')
-        if len(subandcode) is 2:
+        if len(subandcode) == 2:
             url = f'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term={term}&subject={subandcode[0]}&catalog_nbr={subandcode[1]}'
             response = requests.get(url)
             data = response.json()
@@ -172,7 +172,7 @@ def tutor_hours(request):
         tutor_class.save()
 
 
-        messages.success(request, 'Tutoring hours added successfully!')
+        #messages.success(request, 'Tutoring hours added successfully!')
         return render(request, 'tutor_hours.html', {'class_name': class_name, 'start_time': start_time, 'end_time': end_time, 'days_str': days_str, 'tutoring_type': tutoring_type})
 
     return render(request, 'tutor_hours.html')
