@@ -171,8 +171,9 @@ def tutor_hours(request):
 
         tutor_class.save()
 
+
         messages.success(request, 'Tutoring hours added successfully!')
-        return render(request, 'tutor_hours.html')
+        return render(request, 'tutor_hours.html', {'class_name': class_name, 'start_time': start_time, 'end_time': end_time})
 
     return render(request, 'tutor_hours.html')
 
@@ -194,7 +195,6 @@ def student_request_confirmation(request, course_name):
         )
         session_request.save()
         print(session_request.email)
-        #return render(request, 'request_submitted.html', {'class_name' : class_name, 'tutor_for_session': tutor_for_session, 'student': stud})
         return redirect('student_home')
     else:
         return render(request, 'student.html')

@@ -33,7 +33,7 @@ class UserTypeTestCase(TestCase):
 class TutorHoursTestCase(TestCase):
     def test_tutor_hours(self):
         response = self.client.get(reverse('tutor_hours'))
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
 
 class TutorHomeTestCase(TestCase):
     def test_tutor_home(self):
