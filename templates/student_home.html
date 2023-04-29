@@ -3,70 +3,100 @@
 {% bootstrap_css %}
 {% bootstrap_javascript %}
 
+<style>
+  input.form-control { width: 500px!important; }
+  h1 {
+    font-size: 40px;
+    margin:15px;
+  }
+  h3 {
+    margin:15px;
+  }
+</style>
+
 <html>
 <head>
-  <title>Student Home</title>
-
-
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Tutor Me</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-    </div>
-  </div>
-</nav>
-  <br>
-  <br>
-
+  <title>Student Dashboard</title>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Tutor Me</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+          <span class="navbar-text text-white"></span>
+              <li class="nav-item">
+                <form class="form-inline my-2 my-lg-0" align="center" action="{% url 'student_dashboard' %}" method="get">
+                  <input class="form-control mr-sm-3" type="search" name="q" placeholder="Search for a class - e.g. CS 3240" aria-label="Search">
+                  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+              </li>
+          <ul class="navbar-nav">
+            <!-- Add dropdown menu with Home and Logout buttons -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Hi, {{ request.user.username }}
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="{% url 'student_home' %}">My Dashboard</a></li>
+                <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+<div class="container">
 {% if session_requests %}
-<h3>Your Requests</h3>
-<table class="table">
-  <thead>
-    <tr>
-      <th>Student</th>
-      <th>Class</th>
-      <th>Approved</th>
-      <th>Status</th>
-      <th>Delete</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for request in session_requests %}
-    <tr>
-      <td>{{ request.student }}</td>
-      <td>{{ request.class_name }}</td>
-      <td>{{ request.status }}</td>
-        <td>
-          {% if request.status == True %}
-
-            {% csrf_token %}
-            <input type="hidden" name="student" value="{{ request.student }}">
-            <input type="hidden" name="class_name" value="{{ request.class_name }}">
-            <p>Email sent, check your inbox</p>
+  <h1>Your Requests</h1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Student</th>
+        <th>Class</th>
+        <th>Approved</th>
+        <th>Status</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for request in session_requests %}
+      <tr>
+        <td>{{ request.student }}</td>
+        <td>{{ request.class_name }}</td>
+        <td>{{ request.status }}</td>
+          <td>
+            {% if request.status == True %}
+              <form method="POST" action="{% url 'connect' %}">
+              {% csrf_token %}
+              <input type="hidden" name="student" value="{{ request.student }}">
+              <input type="hidden" name="class_name" value="{{ request.class_name }}">
+              <p>Email sent, check your inbox</p>
+              </form>
+            {% else %}
+              <p>Not Approved</p>
+            {% endif %}
+          </td>
+          <td>
+            <form method="POST" action="{% url 'delete_request' %}">
+              {% csrf_token %}
+              <input type="hidden" name="student" value="{{ request.student }}">
+              <input type="hidden" name="class_name" value="{{ request.class_name }}">
+              <button type="submit" class="btn btn-primary ">Cancel Session Request</button>
             </form>
-          {% else %}
-            <p>Not Approved</p>
-          {% endif %}
-        </td>
-        <td>
-          <form method="POST" action="{% url 'delete_request' %}">
-            {% csrf_token %}
-            <input type="hidden" name="student" value="{{ request.student }}">
-            <input type="hidden" name="class_name" value="{{ request.class_name }}">
-            <button type="submit" class="btn btn-primary ">Delete Session Request</button>
-          </form>
-        </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+          </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 {% else %}
-<p>No requests received yet.</p>
+  <h3>No requests made yet. Search for a class to get started!</h3>
 {% endif %}
+  </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 </body>
-
- <a href="{% url 'student_dashboard' %}">Go back to student dashboard</a>
 </html>

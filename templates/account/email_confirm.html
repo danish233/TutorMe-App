@@ -19,6 +19,7 @@
 
 
 {% block content %}
+<div class="container">
 <h1>{% trans "Confirm E-mail Address" %}</h1>
 
 
@@ -41,5 +42,7 @@
 <p>{% blocktrans %}This e-mail confirmation link expired or is invalid. Please <a href="{{ email_url }}">issue a new e-mail confirmation request</a>.{% endblocktrans %}</p>
 
 {% endif %}
+
+</div>
 
 {% endblock %}
