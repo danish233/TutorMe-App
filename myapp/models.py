@@ -35,6 +35,17 @@ class TutorClass(models.Model):
         return self.class_name
 
 class Session_Request(models.Model):
+    """
+    This django model is the main access to the data on students tutor session requests and tutors managing their
+    request. The model allows for students to submit requests, delete requsts, and tutors to accept or reject the tutor
+    session
+
+    class_name : The name of the class for which the session is being requested.
+    tutor_for_session : The name of the tutor the student is requesting a session with.
+    student : The username of the student making the session request.
+    status : A boolean indicating whether the session request has been accepted or rejected by the tutor.
+    email : The email address of the student making the session request.
+    """
     class_name = models.CharField(max_length=225)
     tutor_for_session = models.CharField(max_length=50)
     student = models.CharField(max_length=225)

@@ -185,6 +185,12 @@ def tutor_hours(request):
 
 @login_required
 def student_request_confirmation(request , course_name):
+    """
+    This function saves the students tutor session request to the database. Based on the class that the student has
+    selected from the button, which is the 'POST' request , the session request will be sent to the database and
+    the tutor selected and from there the tutors are able to accept or deny the tutor request.
+    """
+
     if request.method == 'POST':
         class_name = request.POST.get('class_name')
         tutor_for_session = request.POST.get('tutor')
@@ -221,6 +227,13 @@ def parse(courses, data, query):
 
 @login_required
 def sign_up_request(request, course_name):
+    """
+    This view functions allows users to see the tutors that are available for the classes that they have selected from
+    the search page. When the user presses the request session button, this function is called, and it parses through
+    Session_Reqeust database in order to find all the available tutors for that specific selected class.
+    The function then sends the student to the sign up page where they can select the tutor they would like to request a
+    session with.
+    """
     if request.method == 'POST':
         # Get the value of the course_name parameter
         subject = request.POST.get('course_subject')
@@ -258,6 +271,13 @@ def student_home(request):
 @login_required
 @require_POST
 def delete_request(request):
+    """
+    This function operates on the students side of the website and allows students to delete a request for a tutoring
+     session. The parameter is the HTTP request object that comes from the delete button on the
+     student dashboard and when they press that, the function removes the request from the database and then redirects
+     the student back to the student home page.
+
+    """
     student = request.POST['student']
     class_name = request.POST['class_name']
     Session_Request.objects.filter(student=student, class_name=class_name).delete()
