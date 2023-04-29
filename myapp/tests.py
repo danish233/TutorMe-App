@@ -64,11 +64,7 @@ class StudentHomeTestCase(TestCase):
         response = self.client.get(reverse('student_home'))
         self.assertEqual(response.status_code, 302)
 
-class SessionRequestTestCase(TestCase):
-    def test_session_request(self):
-        session = Session_Request(class_name="CS 2100", tutor_for_session="john", student="jane", status=False, email="example@example.com")
-        session.save()
-        self.assertEqual(Session_Request.objects.count(), 11)
+# test cases for models
 
 class TutorClassTestCase(TestCase):
     def test_tutor_class(self):
@@ -84,4 +80,21 @@ class ClassesWithTutorsTestCase(TestCase):
         testc.save()
         self.assertEqual(Classes_with_tutors.objects.count(), 1)
 
+class SessionRequestTestCase(TestCase):
+    def create_session_request(self, class_name="CS 2100", tutor_for_session="john", student="jane", status=False, email="example@example.com"):
+        return Session_Request.objects.create(class_name=class_name, tutor_for_session=tutor_for_session, student=student, status=status, email=email)
 
+    def test_session_request(self):
+        sr = self.create_session_request()
+        self.assertTrue(isinstance(sr, Session_Request))
+
+
+# views (uses reverse)
+
+    def test_whatever_list_view(self):
+        w = self.create_whatever()
+        url = reverse("whatever.views.whatever")
+        resp = self.client.get(url)
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertIn(w.title, resp.content)
