@@ -3,11 +3,49 @@
 {% bootstrap_css %}
 {% bootstrap_javascript %}
 
+<style>
+  input.form-control { width: 500px!important; }
+  h1 {
+    font-size: 40px;
+    margin:15px;
+  }
+</style>
+
 <html>
 <head>
   <title>Tutor Home</title>
 </head>
 <body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Tutor Me</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+          <span class="navbar-text text-white"></span>
+              <li class="nav-item">
+                <form class="form-inline my-2 my-lg-0" align="center" action="{% url 'tutor_dashboard' %}" method="get">
+                  <input class="form-control mr-sm-3" type="search" name="q" placeholder="Search for a class - e.g. CS 3240" aria-label="Search">
+                  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+              </li>
+          <ul class="navbar-nav">
+            <!-- Add dropdown menu with Home and Logout buttons -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Hi, {{ request.user.username }}
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="{% url 'tutor_home' %}">My Dashboard</a></li>
+                <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
   <div class="container">
     <h1>Your Classes</h1>
     <table class="table table-striped table-hover">
@@ -58,7 +96,6 @@
 
 
     </table>
-    <a href="{% url 'tutor_dashboard' %}">Go to Tutor Dashboard</a>
 
     {% if session_requests %}
 <h1>Student Requests</h1>
@@ -93,5 +130,8 @@
 <p>No requests received yet.</p>
 {% endif %}
   </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
