@@ -270,33 +270,6 @@ def delete_availability(request):
     TutorClass.objects.filter(tutor=tutor, class_name=class_name, rate=rate, tutoring_type=tutoring_type, days=days).delete()
     return redirect('tutor_home')
 
-
-@login_required
-def update_availability(request):
-    if request.method == 'POST':
-        class_name = request.POST.get('class_name')
-        start_time = request.POST.get('start_time')
-        end_time = request.POST.get('end_time')
-        new_rate = request.POST.get('rate')
-        tutoring_type = request.POST.get('tutoring_type')
-        days = request.POST.get('days')
-
-        tutor_class, created = TutorClass.objects.update_or_create(
-            class_name=class_name,
-            tutor=request.user.username,
-            rate=new_rate,
-            defaults={
-                'start_time': start_time,
-                'end_time': end_time,
-                'tutoring_type': tutoring_type,
-                'days': days
-            }
-        )
-
-        return redirect('tutor_home')
-    else:
-        return HttpResponseNotAllowed(['POST'])
-
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
