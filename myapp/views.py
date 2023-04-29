@@ -158,7 +158,11 @@ def tutor_hours(request):
         rate = request.POST.get('rate')
         tutoring_type = request.POST.get('tutoring_type')
         days = request.POST.getlist('days[]')
+
         days_str = ", ".join(days)
+
+        if days_str == "":
+            days_str = "Available All Days"
 
         tutor_class = TutorClass(
             class_name=class_name,
