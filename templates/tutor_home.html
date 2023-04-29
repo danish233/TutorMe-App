@@ -19,6 +19,7 @@
           <th>Rate (USD)</th>
           <th>Tutoring Type</th>
           <th>Days</th>
+          <th>Cancel</th>
         </tr>
       </thead>
       <tbody>
@@ -30,6 +31,19 @@
           <td>{{ tc.rate }}</td>
           <td>{{ tc.tutoring_type }}</td>
           <td>{{ tc.days }}</td>
+          <td>
+          <form method="POST" action="{% url 'delete_availability' %}">
+            {% csrf_token %}
+            <input type="hidden" name="class_name" value="{{ tc.class_name }}">
+            <input type="hidden" name="tutor" value="{{ tc.tutor }}">
+            <input type="hidden" name="rate" value="{{ tc.rate }}">
+            <input type="hidden" name="start_time" value="{{ tc.start_time }}">
+            <input type="hidden" name="end_time" value="{{ tc.end_time }}">
+            <input type="hidden" name="tutoring_type" value="{{ tc.tutoring_type }}">
+            <input type="hidden" name="days" value="{{ tc.days }}">
+            <button type="submit" class="btn btn-primary ">Delete Availability</button>
+          </form>
+        </td>
         </tr>
         {% empty %}
         <tr>

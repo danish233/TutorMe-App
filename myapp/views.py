@@ -14,6 +14,7 @@ from django.contrib import messages
 from django.core.mail import send_mail
 import json
 from django.core.mail import send_mail, EmailMessage
+import time
 
 
 @login_required
@@ -257,6 +258,17 @@ def delete_request(request):
     class_name = request.POST['class_name']
     Session_Request.objects.filter(student=student, class_name=class_name).delete()
     return redirect('student_home')
+
+@login_required
+@require_POST
+def delete_availability(request):
+    class_name = request.POST['class_name']
+    tutor = request.POST['tutor']
+    rate = request.POST['rate']
+    tutoring_type = request.POST['tutoring_type']
+    days = request.POST['days']
+    TutorClass.objects.filter(tutor=tutor, class_name=class_name, rate=rate, tutoring_type=tutoring_type, days=days).delete()
+    return redirect('tutor_home')
 
 
 @login_required
