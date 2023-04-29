@@ -172,6 +172,7 @@ def tutor_hours(request):
             end_time=end_time,
             tutoring_type=tutoring_type,
             days=days_str,
+            tutor_email = request.user.email
         )
         #prevent duplicate availability slots
         if not TutorClass.objects.filter(class_name=class_name, tutor=request.user.username, rate=rate, start_time=start_time, end_time=end_time, tutoring_type=tutoring_type, days=days_str,):
@@ -196,14 +197,42 @@ def student_request_confirmation(request , course_name):
         tutor_for_session = request.POST.get('tutor')
         stud = request.user.username
 
+
         session_request = Session_Request(
             class_name=class_name,
             tutor_for_session=tutor_for_session,
             student=stud,
             email=request.user.email
         )
+
+        info = TutorClass.objects.get(class_name=class_name)
+
+        tutor_name = info.tutor
+        tutor_email = info.tutor_email
+        student_email = request.user.email
+        start = info.start_time
+        end = info.end_time
+        type = info.tutoring_type
+        days = info.days
+
+        print(student_email)
+        print(tutor_email)
+        print(tutor_name)
+        print(class_name)
+
+
+
         if not Session_Request.objects.filter(class_name=class_name, tutor_for_session=tutor_for_session, student=stud, email=request.user.email):
             session_request.save()
+            send_mail(
+                'New Student Session Request',
+                f'Hello {tutor_name}, you have received an {type} session request for {class_name} from student {stud}, from {start} to {end} on {days}. Contact details for the student are: Email: {student_email}',
+                'tutormea24@outlook.com',
+                [tutor_email],
+                fail_silently=False,
+            )
+
+
         return redirect('student_home')
     else:
         return render(request, 'student.html')

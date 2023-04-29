@@ -30,6 +30,7 @@ class TutorClass(models.Model):
     end_time = models.TimeField()
     tutoring_type = models.CharField(max_length=20, choices=[('online', 'Online'), ('in_person', 'In Person')])
     days = models.CharField(max_length=100)
+    tutor_email = models.EmailField(default='example@example.com')
 
     def __str__(self):
         return self.class_name
