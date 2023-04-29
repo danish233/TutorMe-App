@@ -12,8 +12,16 @@
 <div class="container">
     <h1>Confirmation of Availability</h1>
     <p>You have selected class: {{ class_name }}</p>
-    <p>You are available from {{ start_time }} to {{ end_time }}.</p>
-    <a href="{% url 'tutor_dashboard' %}">Back to dashboard</a>
+    {% if tutoring_type == "in_person" %}
+        <p>You will meet: In Person</p>
+    {% else %}
+        <p>You will meet: Online</p>
+    {% endif %}
+    <p>You are available from {{ start_time }} to {{ end_time }} on {{ days_str }}.</p>
+
+    <p>Want to add different hours for different days?</p>
+    <a href="javascript:history.back()" class="btn btn-primary">Add More Hours</a>
+    <a href="{% url 'tutor_home' %}" class="btn btn-info">Back To Home</a>
 </div>
 </body>
 </html>

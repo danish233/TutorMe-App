@@ -1,0 +1,58 @@
+{% load bootstrap5 %}
+
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+<html>
+<head>
+  <title>Student Home</title>
+
+{% if session_requests %}
+<h3>Your Requests</h3>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Student</th>
+      <th>Class</th>
+      <th>Approved</th>
+      <th>Status</th>
+      <th>Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for request in session_requests %}
+    <tr>
+      <td>{{ request.student }}</td>
+      <td>{{ request.class_name }}</td>
+      <td>{{ request.status }}</td>
+        <td>
+          {% if request.status == True %}
+            <form method="POST" action="{% url 'connect' %}">
+            {% csrf_token %}
+            <input type="hidden" name="student" value="{{ request.student }}">
+            <input type="hidden" name="class_name" value="{{ request.class_name }}">
+            <p>Email sent, check your inbox</p>
+            </form>
+          {% else %}
+            <p>Not Approved</p>
+          {% endif %}
+        </td>
+        <td>
+          <form method="POST" action="{% url 'delete_request' %}">
+            {% csrf_token %}
+            <input type="hidden" name="student" value="{{ request.student }}">
+            <input type="hidden" name="class_name" value="{{ request.class_name }}">
+            <button type="submit" class="btn btn-primary ">Delete Session Request</button>
+          </form>
+        </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>No requests received yet.</p>
+{% endif %}
+</body>
+
+ <a href="{% url 'student_dashboard' %}">Go back to student dashboard</a>
+</html>

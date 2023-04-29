@@ -96,6 +96,14 @@ DATABASES = {
     }
 }
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST_USER = 'tutormea24@outlook.com'
+EMAIL_HOST = 'smtp-mail.outlook.com'
+DEFAULT_FROM_EMAIL = 'tutormea24@outlook.com'
+EMAIL_PORT = 25
+EMAIL_USE_TLS = True
+EMAIL_HOST_PASSWORD = 'TutorMePass!'
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -160,6 +168,11 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend'
 ]
+
+#Allauth Settings
+ACCOUNT_EMAIL_REQUIRED=True
+ACCOUNT_EMAIL_VERIFICATION="mandatory"
+ACCOUNT_EMAIL_SUBJECT_PREFIX="Tutor Me"
 
 # Bootstrap settings
 BOOTSTRAP5 = {

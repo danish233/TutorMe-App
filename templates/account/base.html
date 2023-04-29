@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+<!-- Bootstrap code -->
+{# Load the tag library #}
+{% load bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+<html>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block head_title %}{% endblock %}</title>
+    {% block extra_head %}
+    {% endblock %}
+  </head>
+  <body>
+    {% block body %}
+
+    {% if messages %}
+    <div>
+      <strong>Messages:</strong>
+      <ul>
+        {% for message in messages %}
+        <li>{{message}}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+
+    <div>
+      <strong>Navigation:</strong>
+      <ul>
+        {% if user.is_authenticated %}
+          {% buttons %}
+          <li><a href="{% url 'account_email' %}" type="button" class="btn btn-primary" style="margin:5px;">Change E-mail</a></li>
+          <li><a href="{% url 'account_logout' %}" type="button" class="btn btn-primary" style="margin:5px;">Sign Out</a></li>
+          {% endbuttons %}
+        {% else %}
+          {% buttons %}
+          <li><a href="{% url 'account_login' %}" type="button" class="btn btn-primary" style="margin:5px;">Sign In</a></li>
+          <li><a href="{% url 'account_signup' %}" type="button" class="btn btn-primary" style="margin:5px;">Sign Up</a></li>
+          {% endbuttons %}
+        {% endif %}
+      </ul>
+    </div>
+    {% block content %}
+    {% endblock %}
+    {% endblock %}
+    {% block extra_body %}
+    {% endblock %}
+  </body>
+</html>
