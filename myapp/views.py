@@ -8,7 +8,7 @@ import requests
 from django.template import loader
 from django.views.decorators.http import require_POST
 
-from .models import TutorClass, Tutor, Classes_with_tutors, Session_Request, Student
+from .models import TutorClass, Tutor, Session_Request, Student
 from django.shortcuts import render
 from django.contrib import messages
 from django.core.mail import send_mail
@@ -310,22 +310,3 @@ def approve_request(request):
     else:
         return HttpResponseNotAllowed(['POST'])
 
-@login_required
-def connect(request):
-    if request.method == 'POST':
-        student = request.POST.get('student')
-        class_name = request.POST.get('class_name')
-
-        req = Session_Request.objects.filter(
-            class_name=class_name,
-            student=student,
-        )
-        #for r in req:
-
-            #display contact information
-
-        context = {}
-
-        return render(request, 'connect.html', context)
-    else:
-        return HttpResponseNotAllowed(['POST'])
