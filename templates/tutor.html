@@ -52,7 +52,7 @@
               {% csrf_token %}
               <input type="hidden" name="class_name" value="{{ course.subject }} {{ course.catalog_nbr }}">
               <label for="hourly rate">Hourly Rate: $</label>
-              <input type="number" name="rate" required>
+              <input type="number" name="rate" min="0" max="1000" oninput="validity.valid||(value='');" required>
               <label for="start_time">From:</label>
               <input type="time" name="start_time" required>
               <label for="end_time">To:</label>
@@ -80,6 +80,7 @@
               <label for="saturday">Saturday</label>
               <input type="checkbox" id="sunday" name="days[]" value="Sunday">
               <label for="sunday">Sunday</label>
+
               <br>
 
               <button type="submit" class="btn btn-primary">Sign Up</button>
