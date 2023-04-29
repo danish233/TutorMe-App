@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.utils import timezone
 from django.test import Client
 from django.urls import reverse
-from .models import TutorClass, Classes_with_tutors
+from .models import TutorClass
 
 # Create your tests here.
 class TestModelTests(TestCase):
