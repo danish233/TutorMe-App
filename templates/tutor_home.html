@@ -23,38 +23,39 @@
         </tr>
       </thead>
       <tbody>
-        {% for tc in tutor_classes %}
-        <tr>
-          <td>{{ tc.class_name }}</td>
-          <td>{{ tc.start_time }}</td>
-          <td>{{ tc.end_time }}</td>
-          <td>{{ tc.rate }}</td>
-          {% if tc.tutoring_type == "in_person" %}
-            <td>In Person</td>
-          {% else %}
-            <td>Online</td>
-          {% endif %}
-          <td>{{ tc.days }}</td>
-          <td>
-          <form method="POST" action="{% url 'delete_availability' %}">
-            {% csrf_token %}
-            <input type="hidden" name="class_name" value="{{ tc.class_name }}">
-            <input type="hidden" name="tutor" value="{{ tc.tutor }}">
-            <input type="hidden" name="rate" value="{{ tc.rate }}">
-            <input type="hidden" name="start_time" value="{{ tc.start_time }}">
-            <input type="hidden" name="end_time" value="{{ tc.end_time }}">
-            <input type="hidden" name="tutoring_type" value="{{ tc.tutoring_type }}">
-            <input type="hidden" name="days" value="{{ tc.days }}">
-            <button type="submit" class="btn btn-primary ">Delete Availability</button>
-          </form>
-        </td>
-        </tr>
-        {% empty %}
-        <tr>
-          <td colspan="6">You have not chosen any classes yet.</td>
-        </tr>
-        {% endfor %}
-      </tbody>
+  {% for tc in tutor_classes %}
+  <tr>
+    <td>{{ tc.class_name }}</td>
+    <td>{{ tc.start_time }}</td>
+    <td>{{ tc.end_time }}</td>
+    <td>{% if tc.rate == 0 %}Free{% else %}{{ tc.rate }}{% endif %}</td>
+    {% if tc.tutoring_type == "in_person" %}
+      <td>In Person</td>
+    {% else %}
+      <td>Online</td>
+    {% endif %}
+    <td>{{ tc.days }}</td>
+    <td>
+    <form method="POST" action="{% url 'delete_availability' %}">
+      {% csrf_token %}
+      <input type="hidden" name="class_name" value="{{ tc.class_name }}">
+      <input type="hidden" name="tutor" value="{{ tc.tutor }}">
+      <input type="hidden" name="rate" value="{{ tc.rate }}">
+      <input type="hidden" name="start_time" value="{{ tc.start_time }}">
+      <input type="hidden" name="end_time" value="{{ tc.end_time }}">
+      <input type="hidden" name="tutoring_type" value="{{ tc.tutoring_type }}">
+      <input type="hidden" name="days" value="{{ tc.days }}">
+      <button type="submit" class="btn btn-primary ">Delete Availability</button>
+    </form>
+  </td>
+  </tr>
+  {% empty %}
+  <tr>
+    <td colspan="6">You have not chosen any classes yet.</td>
+  </tr>
+  {% endfor %}
+</tbody>
+
 
     </table>
     <a href="{% url 'tutor_dashboard' %}">Go to Tutor Dashboard</a>
