@@ -14,7 +14,7 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
-          <span class="navbar-text text-white">Hello, {{ request.user.username }}</span>
+          <span class="navbar-text text-white">Hello, tutor {{ request.user.username }}</span>
           <ul class="navbar-nav">
             <li class="nav-item">
               <form class="form-inline my-2 my-lg-0" action="{% url 'tutor_dashboard' %}" method="get">

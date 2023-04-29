@@ -7,6 +7,20 @@
 <head>
   <title>Student Home</title>
 
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Tutor Me</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+    </div>
+  </div>
+</nav>
+  <br>
+  <br>
+
 {% if session_requests %}
 <h3>Your Requests</h3>
 <table class="table">
@@ -27,7 +41,7 @@
       <td>{{ request.status }}</td>
         <td>
           {% if request.status == True %}
-            <form method="POST" action="{% url 'connect' %}">
+
             {% csrf_token %}
             <input type="hidden" name="student" value="{{ request.student }}">
             <input type="hidden" name="class_name" value="{{ request.class_name }}">
