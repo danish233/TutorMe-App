@@ -1,3 +1,4 @@
+{% extends "account/base.html" %}
 {% load account socialaccount %}
 
 {% block content %}
@@ -13,30 +14,12 @@
 {# Display django.contrib.messages as Bootstrap alerts #}
 {% bootstrap_messages %}
 
-<div class="container">
-
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark justify-content-between">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Tutor Me</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarColor01">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">Sign In
-                            <span class="visually-hidden">(current)</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="/accounts/signup/">Sign Up</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-      </nav>
 
 {% get_providers as socialaccount_providers %}
+
+<div class="container">
+
+<h1>Log In</h1>
 
 {% if socialaccount_providers %}
 <p>Please sign in with one
@@ -73,6 +56,6 @@ for a {{ site_name }} account and then sign in below:</p>
 </div>
 </div>
 
-
+</div>
 
 {% endblock %}

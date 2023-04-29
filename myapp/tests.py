@@ -5,7 +5,6 @@ from django.urls import reverse
 from django.test import TestCase
 from myapp.models import Session_Request, TutorClass
 
-
 # Create your tests here.
 class TestModelTests(TestCase):
 
