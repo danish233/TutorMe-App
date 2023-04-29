@@ -21,7 +21,6 @@ class Student(models.Model):
         return self.user.username
 
 
-
 class TutorClass(models.Model):
     class_name = models.CharField(max_length=255)
     tutor = models.CharField(max_length=255)

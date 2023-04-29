@@ -179,7 +179,7 @@ def tutor_hours(request):
     return render(request, 'tutor_hours.html')
 
 @login_required
-def student_request_confirmation(request , course_name):
+def student_request_confirmation(request, course_name):
     if request.method == 'POST':
         class_name = request.POST.get('class_name')
         tutor_for_session = request.POST.get('tutor')
