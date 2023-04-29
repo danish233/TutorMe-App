@@ -258,6 +258,13 @@ def student_home(request):
 @login_required
 @require_POST
 def delete_request(request):
+    """
+    This function operates on the students side of the website and allows students to delete a request for a tutoring
+     session. The parameter is the HTTP request object that comes from the delete button on the
+     student dashboard and when they press that, the function removes the request from the database and then redirects
+     the student back to the student home page.
+
+    """
     student = request.POST['student']
     class_name = request.POST['class_name']
     Session_Request.objects.filter(student=student, class_name=class_name).delete()
