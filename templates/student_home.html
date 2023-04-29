@@ -54,9 +54,10 @@
   <table class="table">
     <thead>
       <tr>
-        <th>Student</th>
         <th>Class</th>
-        <th>Approved</th>
+        <th>Tutor</th>
+        <th>Session Start Time</th>
+        <th>Session Length (min)</th>
         <th>Status</th>
         <th>Delete</th>
       </tr>
@@ -64,9 +65,10 @@
     <tbody>
       {% for request in session_requests %}
       <tr>
-        <td>{{ request.student }}</td>
         <td>{{ request.class_name }}</td>
-        <td>{{ request.status }}</td>
+        <td>{{ request.tutor_for_session }}</td>
+        <td>{{ request.session_start_time }}</td>
+        <td>{{ request.length_in_min }}</td>
           <td>
             {% if request.status == True %}
               <form method="POST" action="{% url 'connect' %}">

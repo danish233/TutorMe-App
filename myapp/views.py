@@ -174,11 +174,9 @@ def tutor_hours(request):
             days=days_str,
         )
         #prevent duplicate availability slots
-        if not TutorClass.objects.filter(class_name=class_name, tutor=request.user.username, rate=rate, start_time=start_time, end_time=end_time, tutoring_type=tutoring_type, days=days_str,):
+        if not TutorClass.objects.filter(class_name=class_name, tutor=request.user.username, rate=rate, start_time=start_time, end_time=end_time, tutoring_type=tutoring_type, days=days_str):
             tutor_class.save()
 
-
-        #messages.success(request, 'Tutoring hours added successfully!')
         return render(request, 'tutor_hours.html', {'class_name': class_name, 'start_time': start_time, 'end_time': end_time, 'days_str': days_str, 'tutoring_type': tutoring_type})
 
     return render(request, 'tutor_hours.html')
@@ -195,14 +193,18 @@ def student_request_confirmation(request , course_name):
         class_name = request.POST.get('class_name')
         tutor_for_session = request.POST.get('tutor')
         stud = request.user.username
+        session_start_time = request.POST.get('session_start_time')
+        length_in_min = request.POST.get('length_in_min')
 
         session_request = Session_Request(
             class_name=class_name,
             tutor_for_session=tutor_for_session,
             student=stud,
-            email=request.user.email
+            email=request.user.email,
+            session_start_time=session_start_time,
+            length_in_min=length_in_min
         )
-        if not Session_Request.objects.filter(class_name=class_name, tutor_for_session=tutor_for_session, student=stud, email=request.user.email):
+        if not Session_Request.objects.filter(class_name=class_name, tutor_for_session=tutor_for_session, student=stud, email=request.user.email, session_start_time=session_start_time, length_in_min=length_in_min):
             session_request.save()
         return redirect('student_home')
     else:
