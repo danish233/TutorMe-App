@@ -208,26 +208,30 @@ def student_request_confirmation(request , course_name):
             length_in_min=length_in_min
         )
 
-        #TODO: needs to also search by all other tutorclass attributes, otherwise .get() may crash
-        info = TutorClass.objects.get(class_name=class_name, tutor=tutor_for_session)
+        #can't tutor yourself
+        if tutor_for_session != stud:
+            #TODO: needs to also search by all other tutorclass attributes, otherwise .get() may crash
+            info = TutorClass.objects.get(class_name=class_name, tutor=tutor_for_session)
 
-        tutor_name = info.tutor
-        tutor_email = info.tutor_email
-        student_email = request.user.email
-        start = info.start_time
-        end = info.end_time
-        type = info.tutoring_type
-        days = info.days
+            tutor_name = info.tutor
+            tutor_email = info.tutor_email
+            student_email = request.user.email
+            start = info.start_time
+            end = info.end_time
+            type = info.tutoring_type
+            days = info.days
 
-        if not Session_Request.objects.filter(class_name=class_name, tutor_for_session=tutor_for_session, student=stud, email=request.user.email, session_start_time=session_start_time, length_in_min=length_in_min):
-            session_request.save()
-            send_mail(
-                'New Student Session Request',
-                f'Hello {tutor_name}, you have received an {type} session request for {class_name} from student {stud}, from {start} to {end} on {days}. Please login to a24-tutorme.herokuapp.com to approve the request',
-                'tutormea24@outlook.com',
-                [tutor_email],
-                fail_silently=False,
-            )
+            if not Session_Request.objects.filter(class_name=class_name, tutor_for_session=tutor_for_session, student=stud, email=request.user.email, session_start_time=session_start_time, length_in_min=length_in_min):
+                session_request.save()
+                send_mail(
+                    'New Student Session Request',
+                    f'Hello {tutor_name}, you have received an {type} session request for {class_name} from student {stud}, from {start} to {end} on {days}. Please login to a24-tutorme.herokuapp.com to approve the request',
+                    'tutormea24@outlook.com',
+                    [tutor_email],
+                    fail_silently=False,
+                )
+        else:
+            messages.error(request, "You are not permitted to tutor yourself in order to maintain the integrity of our feedback system")
 
         return redirect('student_home')
     else:
@@ -264,7 +268,6 @@ def sign_up_request(request, course_name):
         subject = request.POST.get('course_subject')
         class_number = request.POST.get('course_catalog_nbr')
         full_name = str(subject) + " " + str(class_number)
-        print(full_name)
 
         if full_name:
             tutor_classes = TutorClass.objects.filter(class_name=full_name)
@@ -345,7 +348,6 @@ def leave_rating(request):
     tutor_for_session = request.POST['tutor_for_session']
     student = request.POST['student']
     class_name = request.POST['class_name']
-    session_start_time = request.POST['session_start_time']
     length_in_min = request.POST['length_in_min']
 
 
@@ -388,7 +390,6 @@ def approve_request(request):
         student = request.POST.get('student')
         class_name = request.POST.get('class_name')
         length_in_min = request.POST.get('length_in_min')
-        session_start_time = request.POST.get('session_start_time')
 
         req = Session_Request.objects.filter(
             class_name=class_name,
