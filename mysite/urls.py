@@ -28,6 +28,7 @@ urlpatterns = [
     path('', views.user_type, name='user_type'),
     path('accounts/', include('allauth.urls')),
     path('accounts/google/student/', views.student, name='student_dashboard'),
+    path('accounts/google/student/view_profile', views.view_profile, name='view_profile'),
     path('accounts/google/student/home/', views.student_home, name='student_home'),
     path('accounts/google/student/home/delete_request/', views.delete_request, name='delete_request'),
     path('accounts/google/student/home/leave_rating/', views.leave_rating, name='leave_rating'),

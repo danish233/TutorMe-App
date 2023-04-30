@@ -331,6 +331,15 @@ def update_bio(request):
 
 @login_required
 @require_POST
+def view_profile(request):
+    tutor = request.POST['tutor_username']
+    tutor_ob = Tutor.objects.get(usernm=tutor)
+    context = {'tutor': tutor_ob}
+
+    return render(request, 'view_profile.html', context)
+
+@login_required
+@require_POST
 def leave_rating(request):
     rating = int(request.POST['rating'])
     tutor_for_session = request.POST['tutor_for_session']

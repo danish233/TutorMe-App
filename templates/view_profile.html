@@ -1,0 +1,37 @@
+{% load socialaccount %}
+
+
+{# Load the tag library #}
+{% load bootstrap5 %}
+
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card mt-5">
+        <div class="card-header bg-dark text-light">
+          <h1 class="text-center">Tutor - {{ tutor.usernm }}</h1>
+        </div>
+        <div class="card-body">
+          {% if tutor.avg_rating == 11 %}
+            <h3 class="text-center">Average Rating: No Feedback Yet</h3>
+          {% else %}
+            <h3 class="text-center">Average Rating: {{ tutor.avg_rating }} / 10</h3>
+          {% endif %}
+          <h4 class="text-center">Completed Tutoring Sessions: {{ tutor.number_of_sessions }}</h4>
+          <h5 class="text-center">My Bio:</h5>
+          <p>{{ tutor.bio }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

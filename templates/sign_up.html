@@ -42,7 +42,13 @@
           {% for tutor_class in tutor_classes %}
           <tr>
             <td>{{ tutor_class.class_name }}</td>
-            <td>{{ tutor_class.tutor }}</td>
+            <td>
+              <form method="POST" action="{% url 'view_profile' %}" target="_blank">
+                {% csrf_token %}
+                <input type="hidden" name="tutor_username" value="{{ tutor_class.tutor }}">
+                <button type="submit" class="btn btn-info ">{{ tutor_class.tutor }}</button>
+              </form>
+            </td>
             <td>{{ tutor_class.start_time }}</td>
             <td>{{ tutor_class.end_time }}</td>
             <td>{{ tutor_class.rate }}</td>
