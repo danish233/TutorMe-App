@@ -107,7 +107,7 @@
       <th>Session Start Time</th>
       <th>Session Length (min)</th>
       <th>Approved</th>
-      <th>Approve Request</th>
+      <th>Status</th>
     </tr>
   </thead>
   <tbody>
@@ -119,12 +119,16 @@
       <td>{{ request.length_in_min }}</td>
       <td>{{ request.status }}</td>
         <td>
+          {% if request.status == False %}
           <form method="POST" action="{% url 'approve_request' %}">
             {% csrf_token %}
             <input type="hidden" name="student" value="{{ request.student }}">
             <input type="hidden" name="class_name" value="{{ request.class_name }}">
             <button type="submit" class="btn btn-primary">Approve Request</button>
           </form>
+          {% else %}
+            Awaiting feedback
+          {% endif %}
         </td>
     </tr>
     {% endfor %}

@@ -178,7 +178,6 @@ def tutor_hours(request):
         if not TutorClass.objects.filter(class_name=class_name, tutor=request.user.username, rate=rate, start_time=start_time, end_time=end_time, tutoring_type=tutoring_type, days=days_str,):
             tutor_class.save()
 
-
         #messages.success(request, 'Tutoring hours added successfully!')
         return render(request, 'tutor_hours.html', {'class_name': class_name, 'start_time': start_time, 'end_time': end_time, 'days_str': days_str, 'tutoring_type': tutoring_type})
 
@@ -209,7 +208,8 @@ def student_request_confirmation(request , course_name):
             length_in_min=length_in_min
         )
 
-        info = TutorClass.objects.get(class_name=class_name)
+        #TODO: needs to also search by all other tutorclass attributes, otherwise .get() may crash
+        info = TutorClass.objects.get(class_name=class_name, tutor=tutor_for_session)
 
         tutor_name = info.tutor
         tutor_email = info.tutor_email
@@ -281,6 +281,16 @@ def tutor_home(request):
     tutor_classes = TutorClass.objects.filter(tutor=request.user.username)
     Session_Requests = Session_Request.objects.filter(tutor_for_session=request.user.username)
     # tutor_requests = TutorRequest.objects.filter(tutor=request.user).select_related('student', 'tutor_class')
+
+    #make sure tutor has been added to the Tutor class
+    tutor = Tutor(
+        user=request.user,
+        usernm=request.user.username
+    )
+    if not Tutor.objects.filter(user=request.user, usernm=request.user.username):
+        tutor.save()
+
+
     context = {'tutor_classes': tutor_classes, 'session_requests': Session_Requests}
     return render(request, 'tutor_home.html', context)
 
@@ -306,6 +316,35 @@ def delete_request(request):
     student = request.POST['student']
     class_name = request.POST['class_name']
     Session_Request.objects.filter(student=student, class_name=class_name).delete()
+    return redirect('student_home')
+
+@login_required
+@require_POST
+def leave_rating(request):
+    rating = int(request.POST['rating'])
+    tutor_for_session = request.POST['tutor_for_session']
+    student = request.POST['student']
+    class_name = request.POST['class_name']
+    session_start_time = request.POST['session_start_time']
+    length_in_min = request.POST['length_in_min']
+
+
+    rated_tutor = Tutor.objects.get(usernm=tutor_for_session)
+    if rated_tutor.number_of_sessions == 0:
+        #first ever rating
+        rated_tutor.avg_rating = rating
+        rated_tutor.number_of_sessions = 1
+    else:
+        rated_tutor.avg_rating = ((rated_tutor.avg_rating * rated_tutor.number_of_sessions) + rating) / (rated_tutor.number_of_sessions + 1)
+        rated_tutor.number_of_sessions = rated_tutor.number_of_sessions + 1
+
+    rated_tutor.save()
+
+    Res = Session_Request.objects.filter(tutor_for_session=tutor_for_session, student=student, class_name=class_name, length_in_min=length_in_min)
+    for r in Res:
+        r.left_feedback = True
+        r.save()
+
     return redirect('student_home')
 
 @login_required
@@ -342,10 +381,6 @@ def approve_request(request):
         tutor_name = session_request.tutor_for_session
         tutor_email = request.user.email
         student_email = session_request.email
-
-        print(student_email)
-        print(tutor_email)
-        print(tutor_name)
 
         send_mail(
             'Session Request Approved',
