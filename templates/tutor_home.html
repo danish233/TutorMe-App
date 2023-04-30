@@ -62,6 +62,8 @@
         {% csrf_token %}
         <input type="hidden" name="tutor" value="{{ me.usernm }}">
           <input type="text" id="myBio" name="bio" maxlength = "254" value="{{ me.bio }}">
+        <br>
+        <br>
         <button type="submit" class="btn btn-primary ">Update Bio</button>
       </form>
 
