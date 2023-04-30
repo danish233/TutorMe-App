@@ -3,6 +3,8 @@
 {% bootstrap_css %}
 {% bootstrap_javascript %}
 
+{% bootstrap_messages %}
+
 <style>
   input.form-control { width: 500px!important; }
   h1 {
@@ -59,7 +61,7 @@
         <th>Session Start Time</th>
         <th>Session Length (min)</th>
         <th>Status</th>
-        <th>Delete</th>
+        <th>Action</th>
       </tr>
     </thead>
     <tbody>
@@ -81,12 +83,29 @@
             {% endif %}
           </td>
           <td>
+            {% if request.status == False %}
             <form method="POST" action="{% url 'delete_request' %}">
               {% csrf_token %}
               <input type="hidden" name="student" value="{{ request.student }}">
               <input type="hidden" name="class_name" value="{{ request.class_name }}">
               <button type="submit" class="btn btn-primary ">Cancel Session Request</button>
             </form>
+            {% else %}
+              {% if request.left_feedback == False %}
+                <form method="POST" action="{% url 'leave_rating' %}">
+                  {% csrf_token %}
+                  <input type="number" name="rating" min=0 max=10 required>
+                  <input type="hidden" name="class_name" value="{{ request.class_name }}">
+                  <input type="hidden" name="tutor_for_session" value="{{ request.tutor_for_session }}">
+                  <input type="hidden" name="student" value="{{ request.student }}">
+                  <input type="hidden" name="session_start_time" value="{{ request.session_start_time }}">
+                  <input type="hidden" name="length_in_min" value="{{ request.length_in_min }}">
+                  <button type="submit" class="btn btn-primary ">Rate Tutor (0-10)</button>
+                </form>
+              {% else %}
+                Feedback Recorded
+              {% endif %}
+            {% endif %}
           </td>
       </tr>
       {% endfor %}

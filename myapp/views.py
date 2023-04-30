@@ -178,7 +178,6 @@ def tutor_hours(request):
         if not TutorClass.objects.filter(class_name=class_name, tutor=request.user.username, rate=rate, start_time=start_time, end_time=end_time, tutoring_type=tutoring_type, days=days_str,):
             tutor_class.save()
 
-
         #messages.success(request, 'Tutoring hours added successfully!')
         return render(request, 'tutor_hours.html', {'class_name': class_name, 'start_time': start_time, 'end_time': end_time, 'days_str': days_str, 'tutoring_type': tutoring_type})
 
@@ -196,42 +195,43 @@ def student_request_confirmation(request , course_name):
         class_name = request.POST.get('class_name')
         tutor_for_session = request.POST.get('tutor')
         stud = request.user.username
+        session_start_time = request.POST.get('session_start_time')
+        length_in_min = request.POST.get('length_in_min')
 
 
         session_request = Session_Request(
             class_name=class_name,
             tutor_for_session=tutor_for_session,
             student=stud,
-            email=request.user.email
+            email=request.user.email,
+            session_start_time=session_start_time,
+            length_in_min=length_in_min
         )
 
-        info = TutorClass.objects.get(class_name=class_name)
+        #can't tutor yourself
+        if tutor_for_session != stud:
+            #TODO: needs to also search by all other tutorclass attributes, otherwise .get() may crash
+            i = TutorClass.objects.filter(class_name=class_name, tutor=tutor_for_session)
 
-        tutor_name = info.tutor
-        tutor_email = info.tutor_email
-        student_email = request.user.email
-        start = info.start_time
-        end = info.end_time
-        type = info.tutoring_type
-        days = info.days
+            for info in i:
+                tutor_name = info.tutor
+                tutor_email = info.tutor_email
+                start = info.start_time
+                end = info.end_time
+                type = info.tutoring_type
+                days = info.days
 
-        print(student_email)
-        print(tutor_email)
-        print(tutor_name)
-        print(class_name)
-
-
-
-        if not Session_Request.objects.filter(class_name=class_name, tutor_for_session=tutor_for_session, student=stud, email=request.user.email):
-            session_request.save()
-            send_mail(
-                'New Student Session Request',
-                f'Hello {tutor_name}, you have received an {type} session request for {class_name} from student {stud}, from {start} to {end} on {days}. Contact details for the student are: Email: {student_email}',
-                'tutormea24@outlook.com',
-                [tutor_email],
-                fail_silently=False,
-            )
-
+            if not Session_Request.objects.filter(class_name=class_name, tutor_for_session=tutor_for_session, student=stud, email=request.user.email, session_start_time=session_start_time, length_in_min=length_in_min):
+                session_request.save()
+                send_mail(
+                    'New Student Session Request',
+                    f'Hello {tutor_name}, you have received an {type} session request for {class_name} from student {stud}, from {start} to {end} on {days}. Please login to a24-tutorme.herokuapp.com to approve the request',
+                    'tutormea24@outlook.com',
+                    [tutor_email],
+                    fail_silently=False,
+                )
+        else:
+            messages.error(request, "You are not permitted to tutor yourself in order to maintain the integrity of our feedback system")
 
         return redirect('student_home')
     else:
@@ -268,7 +268,6 @@ def sign_up_request(request, course_name):
         subject = request.POST.get('course_subject')
         class_number = request.POST.get('course_catalog_nbr')
         full_name = str(subject) + " " + str(class_number)
-        print(full_name)
 
         if full_name:
             tutor_classes = TutorClass.objects.filter(class_name=full_name)
@@ -285,7 +284,18 @@ def tutor_home(request):
     tutor_classes = TutorClass.objects.filter(tutor=request.user.username)
     Session_Requests = Session_Request.objects.filter(tutor_for_session=request.user.username)
     # tutor_requests = TutorRequest.objects.filter(tutor=request.user).select_related('student', 'tutor_class')
-    context = {'tutor_classes': tutor_classes, 'session_requests': Session_Requests}
+
+    #make sure tutor has been added to the Tutor class
+    tutor = Tutor(
+        user=request.user,
+        usernm=request.user.username
+    )
+    if not Tutor.objects.filter(user=request.user, usernm=request.user.username):
+        tutor.save()
+
+    me = Tutor.objects.get(user=request.user, usernm=request.user.username)
+
+    context = {'tutor_classes': tutor_classes, 'session_requests': Session_Requests, 'me': me}
     return render(request, 'tutor_home.html', context)
 
 @login_required
@@ -314,6 +324,53 @@ def delete_request(request):
 
 @login_required
 @require_POST
+def update_bio(request):
+    tutor = request.POST['tutor']
+    bio = request.POST['bio']
+    me = Tutor.objects.get(usernm=tutor)
+    me.bio = bio
+    me.save()
+    return redirect('tutor_home')
+
+@login_required
+@require_POST
+def view_profile(request):
+    tutor = request.POST['tutor_username']
+    tutor_ob = Tutor.objects.get(usernm=tutor)
+    context = {'tutor': tutor_ob}
+
+    return render(request, 'view_profile.html', context)
+
+@login_required
+@require_POST
+def leave_rating(request):
+    rating = int(request.POST['rating'])
+    tutor_for_session = request.POST['tutor_for_session']
+    student = request.POST['student']
+    class_name = request.POST['class_name']
+    length_in_min = request.POST['length_in_min']
+
+
+    rated_tutor = Tutor.objects.get(usernm=tutor_for_session)
+    if rated_tutor.number_of_sessions == 0:
+        #first ever rating
+        rated_tutor.avg_rating = rating
+        rated_tutor.number_of_sessions = 1
+    else:
+        rated_tutor.avg_rating = ((rated_tutor.avg_rating * rated_tutor.number_of_sessions) + rating) / (rated_tutor.number_of_sessions + 1)
+        rated_tutor.number_of_sessions = rated_tutor.number_of_sessions + 1
+
+    rated_tutor.save()
+
+    Res = Session_Request.objects.filter(tutor_for_session=tutor_for_session, student=student, class_name=class_name, length_in_min=length_in_min)
+    for r in Res:
+        r.left_feedback = True
+        r.save()
+
+    return redirect('student_home')
+
+@login_required
+@require_POST
 def delete_availability(request):
     class_name = request.POST['class_name']
     tutor = request.POST['tutor']
@@ -332,32 +389,28 @@ def approve_request(request):
     if request.method == 'POST':
         student = request.POST.get('student')
         class_name = request.POST.get('class_name')
+        length_in_min = request.POST.get('length_in_min')
 
         req = Session_Request.objects.filter(
             class_name=class_name,
             student=student,
+            length_in_min=length_in_min,
         )
         for r in req:
             r.status = True
             r.save()
 
-        session_request = Session_Request.objects.get(student=student, class_name=class_name)
+            tutor_name = r.tutor_for_session
+            tutor_email = request.user.email
+            student_email = r.email
 
-        tutor_name = session_request.tutor_for_session
-        tutor_email = request.user.email
-        student_email = session_request.email
-
-        print(student_email)
-        print(tutor_email)
-        print(tutor_name)
-
-        send_mail(
-            'Session Request Approved',
-            f'Hello {student}, your session request for {class_name} has been approved by {tutor_name}. Contact details for the tutor are: Email: {tutor_email}',
-            'tutormea24@outlook.com',
-            [student_email],
-            fail_silently=False,
-        )
+            send_mail(
+                'Session Request Approved',
+                f'Hello {student}, your session request for {class_name} has been approved by {tutor_name}. Contact details for the tutor are: Email: {tutor_email}',
+                'tutormea24@outlook.com',
+                [student_email],
+                fail_silently=False,
+            )
 
         return redirect('tutor_home')
     else:

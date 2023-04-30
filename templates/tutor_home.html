@@ -9,6 +9,10 @@
     font-size: 40px;
     margin:15px;
   }
+  #myBio {
+    height:50px;
+    width:1150px;
+  }
 </style>
 
 <html>
@@ -47,6 +51,20 @@
     </nav>
 
   <div class="container">
+    <h1>Your Profile</h1>
+      {% if me.avg_rating == 11 %}
+        <p>Average Rating: No Feedback Yet</p>
+      {% else %}
+        <p>Average Rating: {{ me.avg_rating }} / 10</p>
+      {% endif %}
+      <p>Sessions Completed: {{ me.number_of_sessions }}</p>
+      <form method="POST" action="{% url 'update_bio' %}">
+        {% csrf_token %}
+        <input type="hidden" name="tutor" value="{{ me.usernm }}">
+          <input type="text" id="myBio" name="bio" maxlength = "254" value="{{ me.bio }}">
+        <button type="submit" class="btn btn-primary ">Update Bio</button>
+      </form>
+
     <h1>Your Classes</h1>
     <table class="table table-striped table-hover">
       <thead>
@@ -89,7 +107,7 @@
   </tr>
   {% empty %}
   <tr>
-    <td colspan="6">You have not chosen any classes yet.</td>
+    <td colspan="6">You have not signed up to tutor any classes yet.</td>
   </tr>
   {% endfor %}
 </tbody>
@@ -104,8 +122,10 @@
     <tr>
       <th>Student</th>
       <th>Class</th>
+      <th>Session Start Time</th>
+      <th>Session Length (min)</th>
       <th>Approved</th>
-      <th>Approve Request</th>
+      <th>Status</th>
     </tr>
   </thead>
   <tbody>
@@ -113,14 +133,21 @@
     <tr>
       <td>{{ request.student }}</td>
       <td>{{ request.class_name }}</td>
+      <td>{{ request.session_start_time }}</td>
+      <td>{{ request.length_in_min }}</td>
       <td>{{ request.status }}</td>
         <td>
+          {% if request.status == False %}
           <form method="POST" action="{% url 'approve_request' %}">
             {% csrf_token %}
             <input type="hidden" name="student" value="{{ request.student }}">
             <input type="hidden" name="class_name" value="{{ request.class_name }}">
+            <input type="hidden" name="length_in_min" value="{{ request.length_in_min }}">
             <button type="submit" class="btn btn-primary">Approve Request</button>
           </form>
+          {% else %}
+            Awaiting feedback
+          {% endif %}
         </td>
     </tr>
     {% endfor %}

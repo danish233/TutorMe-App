@@ -9,6 +9,10 @@ from django.dispatch import receiver
 
 class Tutor(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    usernm = models.CharField(max_length=255, default="No Username Found")
+    number_of_sessions = models.IntegerField(default=0)
+    avg_rating = models.IntegerField(default=11)
+    bio = models.CharField(max_length=255, default="Write a short bio about your skills and experience so students can get to know you better!")
 
     def __str__(self):
         return self.user.username
@@ -54,6 +58,7 @@ class Session_Request(models.Model):
     email = models.EmailField(default='example@example.com')
     session_start_time = models.TimeField(default='00:00')
     length_in_min = models.IntegerField(default=1)
+    left_feedback = models.BooleanField(default=False)
 
     def __str__(self):
         return self.student
