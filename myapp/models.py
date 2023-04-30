@@ -52,6 +52,8 @@ class Session_Request(models.Model):
     student = models.CharField(max_length=225)
     status = models.BooleanField(default=False)
     email = models.EmailField(default='example@example.com')
+    session_start_time = models.TimeField(default='00:00')
+    length_in_min = models.IntegerField(default=1)
 
     def __str__(self):
         return self.student

@@ -1,6 +1,11 @@
 {% load bootstrap5 %}
 {% bootstrap_messages %}
 <!DOCTYPE html>
+
+<style>
+  input.form-control { width: 500px!important; }
+</style>
+
 <html>
   <head>
     <title>Tutor Dashboard</title>
@@ -14,21 +19,21 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
-          <span class="navbar-text text-white">Hello, tutor {{ request.user.username }}</span>
+          <span class="navbar-text text-white"></span>
+              <li class="nav-item">
+                <form class="form-inline my-2 my-lg-0" align="center" action="{% url 'tutor_dashboard' %}" method="get">
+                  <input class="form-control mr-sm-3" type="search" name="q" placeholder="Search for a class - e.g. CS 3240" aria-label="Search">
+                  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+              </li>
           <ul class="navbar-nav">
-            <li class="nav-item">
-              <form class="form-inline my-2 my-lg-0" action="{% url 'tutor_dashboard' %}" method="get">
-                <input class="form-control mr-sm-2" type="search" name="q" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-              </form>
-            </li>
             <!-- Add dropdown menu with Home and Logout buttons -->
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Menu
+                Hi, {{ request.user.username }}
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="{% url 'tutor_home' %}">Home</a></li>
+                <li><a class="dropdown-item" href="{% url 'tutor_home' %}">My Dashboard</a></li>
                 <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
               </ul>
             </li>
