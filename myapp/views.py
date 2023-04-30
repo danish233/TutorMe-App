@@ -211,15 +211,15 @@ def student_request_confirmation(request , course_name):
         #can't tutor yourself
         if tutor_for_session != stud:
             #TODO: needs to also search by all other tutorclass attributes, otherwise .get() may crash
-            info = TutorClass.objects.get(class_name=class_name, tutor=tutor_for_session)
+            i = TutorClass.objects.filter(class_name=class_name, tutor=tutor_for_session)
 
-            tutor_name = info.tutor
-            tutor_email = info.tutor_email
-            student_email = request.user.email
-            start = info.start_time
-            end = info.end_time
-            type = info.tutoring_type
-            days = info.days
+            for info in i:
+                tutor_name = info.tutor
+                tutor_email = info.tutor_email
+                start = info.start_time
+                end = info.end_time
+                type = info.tutoring_type
+                days = info.days
 
             if not Session_Request.objects.filter(class_name=class_name, tutor_for_session=tutor_for_session, student=stud, email=request.user.email, session_start_time=session_start_time, length_in_min=length_in_min):
                 session_request.save()
