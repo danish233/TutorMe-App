@@ -387,28 +387,29 @@ def approve_request(request):
     if request.method == 'POST':
         student = request.POST.get('student')
         class_name = request.POST.get('class_name')
+        length_in_min = request.POST.get('length_in_min')
+        session_start_time = request.POST.get('session_start_time')
 
         req = Session_Request.objects.filter(
             class_name=class_name,
             student=student,
+            length_in_min=length_in_min,
         )
         for r in req:
             r.status = True
             r.save()
 
-        session_request = Session_Request.objects.get(student=student, class_name=class_name)
+            tutor_name = r.tutor_for_session
+            tutor_email = request.user.email
+            student_email = r.email
 
-        tutor_name = session_request.tutor_for_session
-        tutor_email = request.user.email
-        student_email = session_request.email
-
-        send_mail(
-            'Session Request Approved',
-            f'Hello {student}, your session request for {class_name} has been approved by {tutor_name}. Contact details for the tutor are: Email: {tutor_email}',
-            'tutormea24@outlook.com',
-            [student_email],
-            fail_silently=False,
-        )
+            send_mail(
+                'Session Request Approved',
+                f'Hello {student}, your session request for {class_name} has been approved by {tutor_name}. Contact details for the tutor are: Email: {tutor_email}',
+                'tutormea24@outlook.com',
+                [student_email],
+                fail_silently=False,
+            )
 
         return redirect('tutor_home')
     else:

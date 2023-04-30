@@ -142,6 +142,7 @@
             {% csrf_token %}
             <input type="hidden" name="student" value="{{ request.student }}">
             <input type="hidden" name="class_name" value="{{ request.class_name }}">
+            <input type="hidden" name="length_in_min" value="{{ request.length_in_min }}">
             <button type="submit" class="btn btn-primary">Approve Request</button>
           </form>
           {% else %}
