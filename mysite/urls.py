@@ -37,6 +37,7 @@ urlpatterns = [
     path('accounts/google/tutor/tutor_hours/', views.tutor_hours, name='tutor_hours'),
     path('accounts/google/tutor/home/', views.tutor_home, name='tutor_home'),
     path('accounts/google/tutor/home/delete_availability/', views.delete_availability, name='delete_availability'),
+    path('accounts/google/tutor/home/update_bio/', views.update_bio, name='update_bio'),
     path('accounts/google/tutor/approve_request/', views.approve_request, name='approve_request'),
     path('logout/', LogoutView.as_view(), name = 'logout'),
 

@@ -290,8 +290,9 @@ def tutor_home(request):
     if not Tutor.objects.filter(user=request.user, usernm=request.user.username):
         tutor.save()
 
+    me = Tutor.objects.get(user=request.user, usernm=request.user.username)
 
-    context = {'tutor_classes': tutor_classes, 'session_requests': Session_Requests}
+    context = {'tutor_classes': tutor_classes, 'session_requests': Session_Requests, 'me': me}
     return render(request, 'tutor_home.html', context)
 
 @login_required
@@ -317,6 +318,16 @@ def delete_request(request):
     class_name = request.POST['class_name']
     Session_Request.objects.filter(student=student, class_name=class_name).delete()
     return redirect('student_home')
+
+@login_required
+@require_POST
+def update_bio(request):
+    tutor = request.POST['tutor']
+    bio = request.POST['bio']
+    me = Tutor.objects.get(usernm=tutor)
+    me.bio = bio
+    me.save()
+    return redirect('tutor_home')
 
 @login_required
 @require_POST

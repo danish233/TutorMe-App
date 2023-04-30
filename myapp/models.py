@@ -9,9 +9,10 @@ from django.dispatch import receiver
 
 class Tutor(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    usernm = models.CharField(max_length=255, default="No session approved yet")
+    usernm = models.CharField(max_length=255, default="No Username Found")
     number_of_sessions = models.IntegerField(default=0)
     avg_rating = models.IntegerField(default=11)
+    bio = models.CharField(max_length=255, default="Write a short bio about your skills and experience so students can get to know you better!")
 
     def __str__(self):
         return self.user.username

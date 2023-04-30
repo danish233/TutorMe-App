@@ -9,6 +9,10 @@
     font-size: 40px;
     margin:15px;
   }
+  #myBio {
+    height:50px;
+    width:1150px;
+  }
 </style>
 
 <html>
@@ -47,6 +51,20 @@
     </nav>
 
   <div class="container">
+    <h1>Your Profile</h1>
+      {% if me.avg_rating == 11 %}
+        <p>Average Rating: No Feedback Yet</p>
+      {% else %}
+        <p>Average Rating: {{ me.avg_rating }} / 10</p>
+      {% endif %}
+      <p>Sessions Completed: {{ me.number_of_sessions }}</p>
+      <form method="POST" action="{% url 'update_bio' %}">
+        {% csrf_token %}
+        <input type="hidden" name="tutor" value="{{ me.usernm }}">
+          <input type="text" id="myBio" name="bio" maxlength = "254" value="{{ me.bio }}">
+        <button type="submit" class="btn btn-primary ">Update Bio</button>
+      </form>
+
     <h1>Your Classes</h1>
     <table class="table table-striped table-hover">
       <thead>
