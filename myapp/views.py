@@ -223,7 +223,7 @@ def student_request_confirmation(request , course_name):
             session_request.save()
             send_mail(
                 'New Student Session Request',
-                f'Hello {tutor_name}, you have received an {type} session request for {class_name} from student {stud}, from {start} to {end} on {days}. Contact details for the student are: Email: {student_email}',
+                f'Hello {tutor_name}, you have received an {type} session request for {class_name} from student {stud}, from {start} to {end} on {days}. Please login to a24-tutorme.herokuapp.com to approve the request',
                 'tutormea24@outlook.com',
                 [tutor_email],
                 fail_silently=False,
