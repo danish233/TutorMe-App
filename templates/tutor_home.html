@@ -89,7 +89,7 @@
   </tr>
   {% empty %}
   <tr>
-    <td colspan="6">You have not chosen any classes yet.</td>
+    <td colspan="6">You have not signed up to tutor any classes yet.</td>
   </tr>
   {% endfor %}
 </tbody>
@@ -104,6 +104,8 @@
     <tr>
       <th>Student</th>
       <th>Class</th>
+      <th>Session Start Time</th>
+      <th>Session Length (min)</th>
       <th>Approved</th>
       <th>Approve Request</th>
     </tr>
@@ -113,6 +115,8 @@
     <tr>
       <td>{{ request.student }}</td>
       <td>{{ request.class_name }}</td>
+      <td>{{ request.session_start_time }}</td>
+      <td>{{ request.length_in_min }}</td>
       <td>{{ request.status }}</td>
         <td>
           <form method="POST" action="{% url 'approve_request' %}">

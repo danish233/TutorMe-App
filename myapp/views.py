@@ -196,13 +196,17 @@ def student_request_confirmation(request , course_name):
         class_name = request.POST.get('class_name')
         tutor_for_session = request.POST.get('tutor')
         stud = request.user.username
+        session_start_time = request.POST.get('session_start_time')
+        length_in_min = request.POST.get('length_in_min')
 
 
         session_request = Session_Request(
             class_name=class_name,
             tutor_for_session=tutor_for_session,
             student=stud,
-            email=request.user.email
+            email=request.user.email,
+            session_start_time=session_start_time,
+            length_in_min=length_in_min
         )
 
         info = TutorClass.objects.get(class_name=class_name)
@@ -215,14 +219,7 @@ def student_request_confirmation(request , course_name):
         type = info.tutoring_type
         days = info.days
 
-        print(student_email)
-        print(tutor_email)
-        print(tutor_name)
-        print(class_name)
-
-
-
-        if not Session_Request.objects.filter(class_name=class_name, tutor_for_session=tutor_for_session, student=stud, email=request.user.email):
+        if not Session_Request.objects.filter(class_name=class_name, tutor_for_session=tutor_for_session, student=stud, email=request.user.email, session_start_time=session_start_time, length_in_min=length_in_min):
             session_request.save()
             send_mail(
                 'New Student Session Request',
@@ -231,7 +228,6 @@ def student_request_confirmation(request , course_name):
                 [tutor_email],
                 fail_silently=False,
             )
-
 
         return redirect('student_home')
     else:
