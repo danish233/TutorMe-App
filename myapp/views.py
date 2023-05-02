@@ -159,10 +159,11 @@ def tutor_hours(request):
         tutoring_type = request.POST.get('tutoring_type')
         days = request.POST.getlist('days[]')
 
-        days_str = ", ".join(days)
+        if not days:
+            messages.error(request, 'Please select at least one day.')
+            return render(request, 'tutor_hours.html')
 
-        if days_str == "":
-            days_str = "Available All Days"
+        days_str = ", ".join(days)
 
         tutor_class = TutorClass(
             class_name=class_name,
@@ -172,16 +173,20 @@ def tutor_hours(request):
             end_time=end_time,
             tutoring_type=tutoring_type,
             days=days_str,
-            tutor_email = request.user.email
         )
-        #prevent duplicate availability slots
-        if not TutorClass.objects.filter(class_name=class_name, tutor=request.user.username, rate=rate, start_time=start_time, end_time=end_time, tutoring_type=tutoring_type, days=days_str,):
+        # prevent duplicate availability slots
+        if not TutorClass.objects.filter(class_name=class_name, tutor=request.user.username, rate=rate,
+                                         start_time=start_time, end_time=end_time, tutoring_type=tutoring_type,
+                                         days=days_str, ):
             tutor_class.save()
 
-        #messages.success(request, 'Tutoring hours added successfully!')
-        return render(request, 'tutor_hours.html', {'class_name': class_name, 'start_time': start_time, 'end_time': end_time, 'days_str': days_str, 'tutoring_type': tutoring_type})
+        # messages.success(request, 'Tutoring hours added successfully!')
+        return render(request, 'tutor_hours.html',
+                      {'class_name': class_name, 'start_time': start_time, 'end_time': end_time, 'days_str': days_str,
+                       'tutoring_type': tutoring_type})
 
     return render(request, 'tutor_hours.html')
+
 
 @login_required
 def student_request_confirmation(request , course_name):

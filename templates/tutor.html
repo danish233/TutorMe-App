@@ -10,6 +10,17 @@
   <head>
     <title>Tutor Dashboard</title>
     {% bootstrap_css %}
+    <script>
+  function validateDays() {
+    var days = document.querySelectorAll('input[name="days[]"]:checked');
+    if (days.length === 0) {
+      alert('Please select at least one day.');
+      return false;
+    }
+    return true;
+  }
+</script>
+
   </head>
   <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -61,7 +72,7 @@
             <td>{{ course.component }}</td>
             <td>{{ course.descr }}</td>
             <td>
-            <form method="post" action="{% url 'tutor_hours' %}">
+            <form method="post" action="{% url 'tutor_hours' %}" onsubmit="return validateDays();">
               {% csrf_token %}
               <input type="hidden" name="class_name" value="{{ course.subject }} {{ course.catalog_nbr }}">
               <label for="hourly rate">Hourly Rate: $</label>
