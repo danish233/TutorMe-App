@@ -159,10 +159,6 @@ def tutor_hours(request):
         tutoring_type = request.POST.get('tutoring_type')
         days = request.POST.getlist('days[]')
 
-        if not days:
-            messages.error(request, 'Please select at least one day.')
-            return render(request, 'tutor_hours.html')
-
         days_str = ", ".join(days)
 
         tutor_class = TutorClass(
