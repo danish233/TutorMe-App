@@ -7,6 +7,7 @@ from django.contrib.auth.models import Group
 import requests
 from django.template import loader
 from django.views.decorators.http import require_POST
+from datetime import datetime, timedelta, date
 
 from .models import TutorClass, Tutor, Session_Request, Student
 from django.shortcuts import render
@@ -197,6 +198,24 @@ def student_request_confirmation(request , course_name):
         stud = request.user.username
         session_start_time = request.POST.get('session_start_time')
         length_in_min = request.POST.get('length_in_min')
+
+        tutor_class = TutorClass.objects.filter(class_name=class_name, tutor=tutor_for_session).first()
+
+        if tutor_class is None:
+            messages.error(request, "Invalid tutor or class selected")
+            return redirect('student_home')
+
+            # Check if session start time is within tutor's available time range
+        start_time = datetime.strptime(session_start_time, '%H:%M')
+        if start_time < datetime.combine(date.today(), tutor_class.start_time) or start_time > datetime.combine(date.today(), tutor_class.end_time):
+            messages.error(request, "Session start time is not within tutor's available time range")
+            return redirect('student_home')
+
+        # Check if session length is within tutor's available time range
+        end_time = start_time + timedelta(minutes=int(length_in_min))
+        if end_time > tutor_class.end_time:
+            messages.error(request, "Session length exceeds tutor's available time range")
+            return redirect('student_home')
 
 
         session_request = Session_Request(

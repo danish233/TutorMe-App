@@ -1,43 +1,11 @@
 {% load bootstrap5 %}
 {% bootstrap_messages %}
-{% bootstrap_javascript %}
-{% bootstrap_css %}
 
 <!DOCTYPE html>
 <html>
   <head>
     <title>Available Tutors</title>
-     <script type="text/javascript">
-      function convertTime(timeStr) {
-        const time = new Date(`2000-01-01T${timeStr}:00`);
-        return time.getTime() - time.setHours(0, 0, 0, 0);
-      }
-
-      function validateStartTime(event, startInput, endInput) {
-        const start = convertTime(startInput.value);
-        const end = convertTime(endInput.value);
-        const input = convertTime(event.target.value);
-
-        if (input < start || input >= end) {
-          startInput.setCustomValidity(`Start time must be between ${startInput.min} and ${endInput.max}.`);
-        } else {
-          startInput.setCustomValidity("");
-        }
-      }
-
-      function validateLength(event, startInput, endInput, lengthInput) {
-        const start = convertTime(startInput.value);
-        const end = convertTime(endInput.value);
-        const length = parseInt(lengthInput.value);
-        const sessionEnd = start + (length * 60 * 1000);
-
-        if (sessionEnd > end) {
-          lengthInput.setCustomValidity(`Session length cannot exceed tutor's available time (${endInput.value}).`);
-        } else {
-          lengthInput.setCustomValidity("");
-        }
-      }
-    </script>
+    {% bootstrap_css %}
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -89,12 +57,10 @@
               <input type="hidden" name="class_name" value="{{ tutor_class.class_name}}">
               <input type="hidden" name="tutor" value="{{ tutor_class.tutor}}">
               <td>
-                <!--<input type="time" name="session_start_time" min="{{ tutor_class.start_time }}" max="convertTime({{ tutor_class.end_time }})" required>-->
-                <input type="time" name="session_start_time" min="{{ tutor_class.start_time }}" max="{{ tutor_class.end_time }}" oninput="validateStartTime(event, this, {{ tutor_class.end_time }});" required>
+                <input type="time" name="session_start_time" min="{{ tutor_class.start_time }}" max="convertTime({{ tutor_class.end_time }})" required>
               </td>
               <td>
-               <!-- <input type="number" name="length_in_min" min="5" max="1000" required>-->
-                <input type="number" name="length_in_min" min="5" max="1000" oninput="validateLength(event, document.getElementsByName('session_start_time')[0], {{ tutor_class.end_time }}, this);" required>
+                <input type="number" name="length_in_min" min="5" max="1000" required>
               </td>
               <td>
                 <button type="submit" class="btn btn-primary">Submit Tutor Request</button>
@@ -112,5 +78,7 @@
       </table>
     </div>
     {% bootstrap_javascript %}
+  </body>
+</html>
   </body>
 </html>
