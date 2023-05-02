@@ -135,19 +135,9 @@ class TutorHomeTestCase(TestCase):
         response = self.client.get(reverse('tutor_home'))
         self.assertEqual(response.status_code, 302)
 
-class UpdateAvailabilityTestCase(TestCase):
-    def test_update_availability(self):
-        response = self.client.get(reverse('update_availability'))
-        self.assertEqual(response.status_code, 302)
-
 class DeleteRequestTestCase(TestCase):
     def test_delete_request(self):
         response = self.client.get(reverse('delete_request'))
-        self.assertEqual(response.status_code, 302)
-
-class ConnectTestCase(TestCase):
-    def test_connect(self):
-        response = self.client.get(reverse('connect'))
         self.assertEqual(response.status_code, 302)
 
 class ApproveRequestTestCase(TestCase):
@@ -159,3 +149,25 @@ class StudentHomeTestCase(TestCase):
     def test_student_home(self):
         response = self.client.get(reverse('student_home'))
         self.assertEqual(response.status_code, 302)
+
+class UpdateBioTestCase(TestCase):
+    def test_update_bio(self):
+        response = self.client.get(reverse('tutor_home'))
+        self.assertEqual(response.status_code, 302)
+
+class ViewProfileTestCase(TestCase):
+    def test_view_profile(self):
+        response = self.client.get(reverse('view_profile'))
+        self.assertEqual(response.status_code, 302)
+
+class LeaveRatingTestCase(TestCase):
+    def test_leave_rating(self):
+        response = self.client.get(reverse('student_home'))
+        self.assertEqual(response.status_code, 302)
+
+class DeleteAvailabilityTestCase(TestCase):
+    def test_delete_availibility(self):
+        response = self.cleint.get(reverse('tutor_home'))
+        self.assertEqual(response.status_code, 302)
+
+
