@@ -167,7 +167,7 @@ class LeaveRatingTestCase(TestCase):
 
 class DeleteAvailabilityTestCase(TestCase):
     def test_delete_availibility(self):
-        response = self.cleint.get(reverse('tutor_home'))
+        response = self.client.get(reverse('tutor_home'))
         self.assertEqual(response.status_code, 302)
 
 
