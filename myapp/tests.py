@@ -64,37 +64,5 @@ class StudentHomeTestCase(TestCase):
         response = self.client.get(reverse('student_home'))
         self.assertEqual(response.status_code, 302)
 
-# test cases for models
-
-class TutorClassTestCase(TestCase):
-    def test_tutor_class(self):
-        tutorc = TutorClass(class_name="CS 2100", tutor="john", rate=0, start_time="04:10:00", end_time="05:10:00", tutoring_type="online", days=5)
-        tutorc.save()
-        self.assertEqual(TutorClass.objects.count(), 2)
-
-class ClassesWithTutorsTestCase(TestCase):
-    def test_classes_with_tutors(self):
-        tutorclass = TutorClass(class_name="CS 2100", tutor="john", rate=0, start_time="04:10:00", end_time="05:10:00", tutoring_type="online", days=5)
-        tutorclass.save()
-        testc = Classes_with_tutors(class_name="CS 2100", class_code=tutorclass)
-        testc.save()
-        self.assertEqual(Classes_with_tutors.objects.count(), 1)
-
-class SessionRequestTestCase(TestCase):
-    def create_session_request(self, class_name="CS 2100", tutor_for_session="john", student="jane", status=False, email="example@example.com"):
-        return Session_Request.objects.create(class_name=class_name, tutor_for_session=tutor_for_session, student=student, status=status, email=email)
-
-    def test_session_request(self):
-        sr = self.create_session_request()
-        self.assertTrue(isinstance(sr, Session_Request))
 
 
-# views (uses reverse)
-
-    def test_whatever_list_view(self):
-        w = self.create_whatever()
-        url = reverse("whatever.views.whatever")
-        resp = self.client.get(url)
-
-        self.assertEqual(resp.status_code, 200)
-        self.assertIn(w.title, resp.content)

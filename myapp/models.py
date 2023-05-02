@@ -20,7 +20,6 @@ class Student(models.Model):
     def __str__(self):
         return self.user.username
 
-
 class TutorClass(models.Model):
     class_name = models.CharField(max_length=255)
     tutor = models.CharField(max_length=255)
@@ -32,7 +31,6 @@ class TutorClass(models.Model):
 
     def __str__(self):
         return self.class_name
-
 
 class Classes_with_tutors(models.Model):
     class_name = models.CharField(max_length=225)
