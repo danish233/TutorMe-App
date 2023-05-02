@@ -118,3 +118,44 @@ class TutorClassModelTest(TestCase):
         tutor_class = TutorClass.objects.get(id=self.tutor_class.id)
         expected_object_name = f'{tutor_class.class_name}'
         self.assertEquals(expected_object_name, str(tutor_class))
+
+
+class UserTypeTestCase(TestCase):
+    def test_user_type(self):
+        response = self.client.get(reverse('user_type'))
+        self.assertEqual(response.status_code, 302)
+
+class TutorHoursTestCase(TestCase):
+    def test_tutor_hours(self):
+        response = self.client.get(reverse('tutor_hours'))
+        self.assertEqual(response.status_code, 302)
+
+class TutorHomeTestCase(TestCase):
+    def test_tutor_home(self):
+        response = self.client.get(reverse('tutor_home'))
+        self.assertEqual(response.status_code, 302)
+
+class UpdateAvailabilityTestCase(TestCase):
+    def test_update_availability(self):
+        response = self.client.get(reverse('update_availability'))
+        self.assertEqual(response.status_code, 302)
+
+class DeleteRequestTestCase(TestCase):
+    def test_delete_request(self):
+        response = self.client.get(reverse('delete_request'))
+        self.assertEqual(response.status_code, 302)
+
+class ConnectTestCase(TestCase):
+    def test_connect(self):
+        response = self.client.get(reverse('connect'))
+        self.assertEqual(response.status_code, 302)
+
+class ApproveRequestTestCase(TestCase):
+    def test_approve_request(self):
+        response = self.client.get(reverse('approve_request'))
+        self.assertEqual(response.status_code, 302)
+
+class StudentHomeTestCase(TestCase):
+    def test_student_home(self):
+        response = self.client.get(reverse('student_home'))
+        self.assertEqual(response.status_code, 302)
