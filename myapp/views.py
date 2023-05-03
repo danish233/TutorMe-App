@@ -208,19 +208,6 @@ def student_request_confirmation(request , course_name):
             messages.error(request, "Invalid tutor or class selected")
             return redirect('student_home')
 
-        # Check if session start time is within tutor's available time range
-        start_time = datetime.strptime(session_start_time, '%H:%M').time()
-
-        if start_time < tutor_class.start_time or start_time > tutor_class.end_time:
-            messages.error(request, "Session start time is not within tutor's available time range")
-            return redirect('student_home')
-
-        # Check if session length is within tutor's available time range
-        end_time = (datetime.combine(date.today(), start_time) + timedelta(minutes=int(length_in_min))).time()
-        if end_time > tutor_class.end_time:
-            messages.error(request, "Session length exceeds tutor's available time range")
-            return redirect('student_home')
-
         session_request = Session_Request(
             class_name=class_name,
             tutor_for_session=tutor_for_session,
