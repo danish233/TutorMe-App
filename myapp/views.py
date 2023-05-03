@@ -12,10 +12,13 @@ from datetime import datetime, timedelta, date
 from .models import TutorClass, Tutor, Session_Request, Student
 from django.shortcuts import render
 from django.contrib import messages
+from django.conf import settings
 from django.core.mail import send_mail
 import json
 from django.core.mail import send_mail, EmailMessage
 import time
+from datetime import datetime, timedelta, date
+import pytz
 
 
 @login_required
@@ -205,18 +208,18 @@ def student_request_confirmation(request , course_name):
             messages.error(request, "Invalid tutor or class selected")
             return redirect('student_home')
 
-            # Check if session start time is within tutor's available time range
-        start_time = datetime.strptime(session_start_time, '%H:%M')
-        if start_time < datetime.combine(date.today(), tutor_class.start_time) or start_time > datetime.combine(date.today(), tutor_class.end_time):
+        # Check if session start time is within tutor's available time range
+        start_time = datetime.strptime(session_start_time, '%H:%M').time()
+
+        if start_time < tutor_class.start_time or start_time > tutor_class.end_time:
             messages.error(request, "Session start time is not within tutor's available time range")
             return redirect('student_home')
 
         # Check if session length is within tutor's available time range
-        end_time = start_time + timedelta(minutes=int(length_in_min))
+        end_time = (datetime.combine(date.today(), start_time) + timedelta(minutes=int(length_in_min))).time()
         if end_time > tutor_class.end_time:
             messages.error(request, "Session length exceeds tutor's available time range")
             return redirect('student_home')
-
 
         session_request = Session_Request(
             class_name=class_name,
