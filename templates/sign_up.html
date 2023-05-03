@@ -56,13 +56,13 @@
               {% csrf_token %}
               <input type="hidden" name="class_name" value="{{ tutor_class.class_name}}">
               <input type="hidden" name="tutor" value="{{ tutor_class.tutor}}">
-              <td> 
+              <td>
                 <input type="time" name="session_start_time" min="{{ tutor_class.start_time }}" max="convertTime({{ tutor_class.end_time }})" required>
               </td>
-              <td> 
+              <td>
                 <input type="number" name="length_in_min" min="5" max="1000" required>
               </td>
-              <td> 
+              <td>
                 <button type="submit" class="btn btn-primary">Submit Tutor Request</button>
               </td>
             </form>
@@ -78,5 +78,7 @@
       </table>
     </div>
     {% bootstrap_javascript %}
+  </body>
+</html>
   </body>
 </html>
