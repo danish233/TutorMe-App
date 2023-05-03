@@ -209,17 +209,17 @@ def student_request_confirmation(request , course_name):
             return redirect('student_home')
 
         if session_start_time == 'midnight':
-            session_start_time = '12:00 a.m.'
+            session_start_time = '00:00'
         if session_start_time == 'noon':
-            session_start_time = '12:00 p.m.'
+            session_start_time = '12:00'
         if tutor_class.end_time == 'midnight':
-            tutor_class_end_time = '12:00 a.m.'
+            tutor_class.end_time = '00:00'
         if tutor_class.end_time == 'noon':
-            tutor_class_end_time = '12:00 p.m.'
+            tutor_class.end_time = '12:00'
         if tutor_class.start_time == 'midnight':
-            tutor_class_start_time = '12:00 a.m.'
+            tutor_class.start_time = '00:00'
         if tutor_class.start_time == 'noon':
-            tutor_class_start_time = '12:00 p.m.'
+            tutor_class.start_time = '12:00'
 
         print(session_start_time)
 
@@ -233,13 +233,13 @@ def student_request_confirmation(request , course_name):
         print(tutor_end_time)'''
 
 
-        if start_time < tutor_class_start_time or start_time > tutor_class_end_time:
+        if start_time < tutor_class.start_time or start_time > tutor_class.end_time:
             messages.error(request, "Session start time is not within tutor's available time range")
             return redirect('student_home')
 
         # Check if session length is within tutor's available time range
         end_time = (datetime.combine(date.today(), start_time) + timedelta(minutes=int(length_in_min))).time()
-        if end_time > tutor_class_end_time:
+        if end_time > tutor_class.end_time:
             messages.error(request, "Session length exceeds tutor's available time range")
             return redirect('student_home')
 
