@@ -18,7 +18,6 @@ import json
 from django.core.mail import send_mail, EmailMessage
 import time
 from datetime import datetime, timedelta, date
-import pytz
 
 
 @login_required
@@ -251,7 +250,7 @@ def student_request_confirmation(request , course_name):
                     f'Hello {tutor_name}, you have received an {type} session request for {class_name} from student {stud}, from {start} to {end} on {days}. Please login to a24-tutorme.herokuapp.com to approve the request',
                     'tutormea24@outlook.com',
                     [tutor_email],
-                    fail_silently=False,
+                    fail_silently=True,
                 )
         else:
             messages.error(request, "You are not permitted to tutor yourself in order to maintain the integrity of our feedback system")
@@ -432,7 +431,7 @@ def approve_request(request):
                 f'Hello {student}, your session request for {class_name} has been approved by {tutor_name}. Contact details for the tutor are: Email: {tutor_email}',
                 'tutormea24@outlook.com',
                 [student_email],
-                fail_silently=False,
+                fail_silently=True,
             )
 
         return redirect('tutor_home')
