@@ -1,2 +1,1 @@
-#Project A-24 Tutor Me
-
+Tutor Me web application developed during CS 3240 (Advanced Software Development).
