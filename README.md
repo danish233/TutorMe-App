@@ -1,1 +1,1 @@
-Tutor Me web application 
+Tutor Me App
